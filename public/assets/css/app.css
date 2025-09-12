@@ -70,11 +70,11 @@ a {
 }
 
 .logo-text {
-	font-size: 26px;
+	font-size: 15px;
 	margin-left: 10px;
-	margin-top: 5px;
+	margin-top: 3px;
 	margin-bottom: 0;
-	letter-spacing: 8px;
+	letter-spacing: 2px;
 	color: #fff
 }
 
@@ -93,11 +93,11 @@ a {
 }
 
 .logo-text-login {
-	font-size: 32px;
+	font-size: 25px;
 	margin-left: 8px;
 	margin-top: 0;
 	margin-bottom: 0;
-	letter-spacing: 11.5px;
+	letter-spacing: 8px;
 	color: #fff;
 }
 
@@ -650,14 +650,14 @@ a {
 }
 
 .bg-login {
-	background-image: url(../images/login-images/bg-login-img.png);
+	background-image: url(../images/login-images/bg-lock-screen.jpg);
 	background-size: cover;
 	background-position: center;
 	background-repeat: no-repeat;
 	background-attachment: fixed
 }
 
-.bg-login::before {
+/* .bg-login::before {
 	content: "";
 	position: absolute;
 	top: 0;
@@ -666,7 +666,7 @@ a {
 	height: 100%;
 	background-color: rgba(0, 0, 0, 0.75);
 	z-index: 1;
-}
+} */
 
 .bg-login>* {
 	position: relative;
