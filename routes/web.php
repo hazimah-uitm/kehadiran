@@ -17,10 +17,22 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
+Route::get('/manual-pengguna', function () {
+    return redirect(url('public/storage/Manual Pengguna Sistem Kehadiran.pdf'));
+})->name('manual-pengguna');
+
 // Login & logout function
 Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('/login', 'Auth\LoginController@login');
 Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
+Route::get('/first-time-login', 'Auth\LoginController@showForm')->name('firsttimelogin.form');
+Route::post('/first-time-login', 'Auth\LoginController@sendLink')->name('firsttimelogin.send');
+
+Route::get('/pengesahan-akaun', 'UserController@showPengesahanAkaunForm')->name('pengesahanakaun.form');
+Route::post('/first-time', 'UserController@handleFirstTime')->name('firsttime.handle');
+Route::get('register', 'UserController@showPublicRegisterForm')->name('register');
+Route::post('register', 'UserController@storePublicRegister')->name('register.store');
+Route::get('/verify-email/{token}', 'UserController@verifyEmail')->name('verify.email');
 
 // Password Reset Routes
 Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
@@ -40,6 +52,10 @@ Route::middleware('auth')->group(function () {
     Route::get('position/view/{id}', 'PositionController@show')->name('position.show');
     Route::get('/position/search', 'PositionController@search')->name('position.search');
 
+    //Ptj
+    Route::get('ptj', 'PtjController@index')->name('ptj');
+    Route::get('ptj/view/{id}', 'PtjController@show')->name('ptj.show');
+    Route::get('/ptj/search', 'PtjController@search')->name('ptj.search');
 
     Route::get('/home', 'HomeController@index')->name('home');
 
@@ -66,6 +82,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/user/trash', 'UserController@trashList')->name('user.trash');
     Route::get('/user/{id}/restore', 'UserController@restore')->name('user.restore');
     Route::delete('/user/{id}/force-delete', 'UserController@forceDelete')->name('user.forceDelete');
+    Route::get('user/import', 'UserController@importForm')->name('user.importForm');
+    Route::post('user/import', 'UserController@import')->name('user.import');
 
     // User Role Management
     Route::get('user-role', 'UserRoleController@index')->name('user-role');
@@ -89,6 +107,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/campus/trash', 'CampusController@trashList')->name('campus.trash');
     Route::get('/campus/{id}/restore', 'CampusController@restore')->name('campus.restore');
     Route::delete('/campus/{id}/force-delete', 'CampusController@forceDelete')->name('campus.forceDelete');
+
+    //Ptj
+    Route::get('ptj/create', 'PtjController@create')->name('ptj.create');
+    Route::post('ptj/store', 'PtjController@store')->name('ptj.store');
+    Route::get('ptj/{id}/edit', 'PtjController@edit')->name('ptj.edit');
+    Route::post('ptj/{id}', 'PtjController@update')->name('ptj.update');
+    Route::delete('ptj/{id}', 'PtjController@destroy')->name('ptj.destroy');
+    Route::get('/ptj/trash', 'PtjController@trashList')->name('ptj.trash');
+    Route::get('/ptj/{id}/restore', 'PtjController@restore')->name('ptj.restore');
+    Route::delete('/ptj/{id}/force-delete', 'PtjController@forceDelete')->name('ptj.forceDelete');
 
     //Position
     Route::get('position/create', 'PositionController@create')->name('position.create');

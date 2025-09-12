@@ -24,12 +24,13 @@
                 <table class="table">
                     <thead>
                         <tr>
+                            <th>#</th>
                             <th>Nama</th>
                             <th>No. Pekerja</th>
-                            <th>Alamat Emel</th>
-                            <th>Jawatan</th>
                             <th>Kampus</th>
+                            <th>PTJ</th>
                             <th>Peranan</th>
+                            <th>Status</th>
                             <th>Tindakan</th>
                         </tr>
                     </thead>
@@ -37,11 +38,11 @@
                         @if (count($trashList) > 0)
                             @foreach ($trashList as $user)
                                 <tr>
+                                    <td>{{ $loop->iteration }}</td>
                                     <td>{{ ucfirst($user->name) }}</td>
                                     <td>{{ $user->staff_id }}</td>
-                                    <td>{{ $user->email }}</td>
-                                    <td>{{ $user->position->title }} ({{ $user->position->grade }})</td>
-                                    <td>{{ $user->campus->name }}</td>
+                                    <td>{{ $user->campus->name ?? '-' }}</td>
+                                    <td>{{ $user->ptj->name ?? '-' }}</td>
                                     <td>
                                         @if ($user->roles->count() === 1)
                                             {{ ucwords(str_replace('-', ' ', $user->roles->first()->name)) }}
@@ -51,6 +52,13 @@
                                                     <li>{{ ucwords(str_replace('-', ' ', $role->name)) }}</li>
                                                 @endforeach
                                             </ul>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if ($user->publish_status == 'Aktif')
+                                            <span class="badge bg-success">Aktif</span>
+                                        @else
+                                            <span class="badge bg-danger">Tidak Aktif</span>
                                         @endif
                                     </td>
                                     <td>
@@ -68,7 +76,7 @@
                                 </tr>
                             @endforeach
                         @else
-                            <td colspan="4">Tiada rekod</td>
+                            <td colspan="9">Tiada rekod</td>
                         @endif
                     </tbody>
                 </table>

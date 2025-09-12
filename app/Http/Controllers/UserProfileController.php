@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Campus;
 use App\Models\Position;
+use App\Models\Ptj;
 use Illuminate\Support\Facades\Hash;
 
 class UserProfileController extends Controller
@@ -24,6 +25,7 @@ class UserProfileController extends Controller
         $user = User::findOrFail($id);
         $campusList = Campus::where('publish_status', 1)->get();
         $positionList = Position::where('publish_status', 1)->get();
+        $ptjList = Ptj::where('publish_status', 1)->get();
 
         return view('pages.user.profile.edit', [
             'save_route' => route('profile.update', $id),
@@ -31,6 +33,7 @@ class UserProfileController extends Controller
             'user' => $user,
             'campusList' => $campusList,
             'positionList' => $positionList,
+            'ptjList' => $ptjList,
         ]);
     }
 
@@ -43,7 +46,7 @@ class UserProfileController extends Controller
             'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'position_id' => 'required|exists:positions,id',
             'campus_id'  => 'required|exists:campuses,id',
-            'office_phone_no' => 'nullable|string',
+            'phone_no' => 'nullable|string',
         ], [
             'name.required'     => 'Sila isi nama pengguna',
             'staff_id.required' => 'Sila isi no. pekerja pengguna',
@@ -57,7 +60,7 @@ class UserProfileController extends Controller
         $user = User::findOrFail($id);
 
         // Update the user's basic information
-        $user->fill($request->only('name', 'staff_id', 'email', 'position_id', 'office_phone_no', 'campus_id'));
+        $user->fill($request->only('name', 'staff_id', 'email', 'position_id', 'phone_no', 'campus_id'));
 
         // Handle profile image update or removal
         if ($request->hasFile('profile_image')) {

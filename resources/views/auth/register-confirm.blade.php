@@ -18,23 +18,15 @@
                             <div class="card-body">
                                 <div class="border p-2 rounded">
                                     <div class="text-center mb-4">
-                                        <h3>{{ __('Sila Sahkan Alamat Emel Anda') }}</h3>
+                                        <h3>{{ __('Pendaftaran Berjaya') }}</h3>
                                     </div>
-                                    @if (session('resent'))
-                                        <div class="alert alert-success text-center" role="alert">
-                                            {{ __('Pautan pengesahan baru telah dihantar ke emel anda.') }}
-                                        </div>
-                                    @endif
 
-                                    <div class="form-body text-center">
-                                        <form method="GET" action="{{ route('verification.resend') }}">
-                                            {{ csrf_field() }}
-                                            <p class="mb-2">
-                                                {{ __('Sila periksa emel untuk pautan pengesahan. Jika tiada,') }}</p>
-                                            <button type="submit"
-                                                class="btn btn-primary">{{ __('Klik di sini untuk pautan baru') }}</button>
-                                        </form>
+                                    <div class="text-center mb-3">
+                                        <p class="mb-2">
+                                            {{ __('Sila semak emel anda untuk pautan pengesahan sebelum log masuk.') }}
+                                        </p>
                                     </div>
+                                    
                                 </div>
                             </div>
                         </div>

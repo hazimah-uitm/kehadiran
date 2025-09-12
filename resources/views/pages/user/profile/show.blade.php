@@ -33,8 +33,9 @@
                     <div class="card-body">
                         <div class="d-flex flex-column align-items-center text-center">
                             <!-- User Image -->
-                            <img src="{{ $user->profile_image ? asset('public/storage/' . $user->profile_image) : 'https://via.placeholder.com/150' }}"
-                                alt="Profile Image" class="rounded-circle p-1 bg-primary" width="150" height="150">
+                            <img src="{{ !empty($user->profile_image) ? asset('public/storage/' . $user->profile_image) : asset('public/assets/images/avatars/user.png') }}"
+                                        alt="Profile Image" class="rounded-circle p-1 bg-primary profile-preview"
+                                        width="150" height="150">
                             <!-- User Name and Position -->
                             <div class="d-flex flex-column align-items-center text-center">
                                 <h5 class="mt-3">{{ $user->name }}</h5>
@@ -55,7 +56,7 @@
                                 <td>{{ $user->email ?? '-' }}</td>
                             </tr>
                             <tr class="border-bottom">
-                                <th>Staff ID</th>
+                                <th>No. Pekerja</th>
                                 <td>{{ $user->staff_id ?? '-' }}</td>
                             </tr>
                             <tr class="border-bottom">
@@ -63,8 +64,16 @@
                                 <td>{{ $user->campus->name }}</td>
                             </tr>
                             <tr class="border-bottom">
-                                <th>No. Telefon Pejabat</th>
-                                <td>{{ $user->office_phone_no ?? '-' }}</td>
+                                <th>No. Telefon</th>
+                                <td>{{ $user->phone_no ?? '-' }}</td>
+                            </tr>
+                            <tr class="border-bottom">
+                                <th>Jawatan</th>
+                                <td>{{ $user->position->title ?? '-' }} ({{ $user->position->grade ?? '-' }})</td>
+                            </tr>
+                            <tr class="border-bottom">
+                                <th>PTJ</th>
+                                <td>{{ $user->ptj->name ?? '-' }}</td>
                             </tr>
                             <tr class="border-bottom">
                                 <th>Peranan</th>

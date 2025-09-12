@@ -23,8 +23,9 @@ class SuperAdminSeeder extends Seeder
             'staff_id' => '100001',
             'password' => Hash::make('superadmin123'),
             'position_id' => 1,
+            'ptj_id'        => 1,  
             'campus_id' => 2,
-            'office_phone_no' => '082000000',
+            'phone_no' => '082000000',
             'publish_status' => true,
             'email_verified_at' => now(), 
         ]);
