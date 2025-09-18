@@ -62,6 +62,11 @@ Route::middleware('auth')->group(function () {
     Route::get('program/view/{id}', 'ProgramController@show')->name('program.show');
     Route::get('/program/search', 'ProgramController@search')->name('program.search');
 
+    //Session
+    Route::get('session', 'SessionController@index')->name('session');
+    Route::get('session/view/{id}', 'SessionController@show')->name('session.show');
+    Route::get('/session/search', 'SessionController@search')->name('session.search');
+
     Route::get('/home', 'HomeController@index')->name('home');
 
     // User Profile
@@ -132,6 +137,19 @@ Route::middleware('auth')->group(function () {
     Route::get('/program/trash', 'ProgramController@trashList')->name('program.trash');
     Route::get('/program/{id}/restore', 'ProgramController@restore')->name('program.restore');
     Route::delete('/program/{id}/force-delete', 'ProgramController@forceDelete')->name('program.forceDelete');
+
+    //Session
+    Route::get('program/{program}/session', 'SessionController@index')->name('session');
+    Route::get('program/{program}/session/search', 'SessionController@search')->name('session.search');
+    Route::get('program/{program}/session/trash', 'SessionController@trashList')->name('session.trash');
+    Route::get('program/{program}/session/{id}/restore', 'SessionController@restore')->name('session.restore');
+    Route::delete('program/{program}/session/{id}/force-delete', 'SessionController@forceDelete')->name('session.forceDelete');
+    Route::get('program/{program}/session/create', 'SessionController@create')->name('session.create');
+    Route::post('program/{program}/session', 'SessionController@store')->name('session.store');
+    Route::get('program/{program}/session/{session}', 'SessionController@show')->name('session.show');
+    Route::get('program/{program}/session/{session}/edit', 'SessionController@edit')->name('session.edit');
+    Route::put('program/{program}/session/{session}', 'SessionController@update')->name('session.update');
+    Route::delete('program/{program}/session/{session}', 'SessionController@destroy')->name('session.destroy');
 
     //Position
     Route::get('position/create', 'PositionController@create')->name('position.create');
