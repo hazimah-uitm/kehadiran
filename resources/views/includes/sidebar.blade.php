@@ -42,6 +42,15 @@
             </a>
         </li>
 
+        <li class="menu-label">Pengurusan Rekod</li>
+
+        <li class="{{ Request::is('program*') ? 'mm-active' : '' }}">
+            <a href="{{ route('program') }}">
+                <div class="parent-icon"><i class='bx bx-calendar-event'></i></div>
+                <div class="menu-title">Program</div>
+            </a>
+        </li>
+
 
         <li class="menu-label">Tetapan</li>
 

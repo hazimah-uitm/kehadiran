@@ -57,6 +57,11 @@ Route::middleware('auth')->group(function () {
     Route::get('ptj/view/{id}', 'PtjController@show')->name('ptj.show');
     Route::get('/ptj/search', 'PtjController@search')->name('ptj.search');
 
+    //Program
+    Route::get('program', 'ProgramController@index')->name('program');
+    Route::get('program/view/{id}', 'ProgramController@show')->name('program.show');
+    Route::get('/program/search', 'ProgramController@search')->name('program.search');
+
     Route::get('/home', 'HomeController@index')->name('home');
 
     // User Profile
@@ -117,6 +122,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/ptj/trash', 'PtjController@trashList')->name('ptj.trash');
     Route::get('/ptj/{id}/restore', 'PtjController@restore')->name('ptj.restore');
     Route::delete('/ptj/{id}/force-delete', 'PtjController@forceDelete')->name('ptj.forceDelete');
+
+    //Program
+    Route::get('program/create', 'ProgramController@create')->name('program.create');
+    Route::post('program/store', 'ProgramController@store')->name('program.store');
+    Route::get('program/{id}/edit', 'ProgramController@edit')->name('program.edit');
+    Route::post('program/{id}', 'ProgramController@update')->name('program.update');
+    Route::delete('program/{id}', 'ProgramController@destroy')->name('program.destroy');
+    Route::get('/program/trash', 'ProgramController@trashList')->name('program.trash');
+    Route::get('/program/{id}/restore', 'ProgramController@restore')->name('program.restore');
+    Route::delete('/program/{id}/force-delete', 'ProgramController@forceDelete')->name('program.forceDelete');
 
     //Position
     Route::get('position/create', 'PositionController@create')->name('position.create');
