@@ -31,6 +31,7 @@ class ProgramController extends Controller
     {
         $request->validate([
             'title'          => 'required|unique:programs',
+            'program_code'          => 'required|unique:programs',
             'description'    => 'nullable',
             'start_date'     => 'required|date',
             'end_date'       => 'required|date|after_or_equal:start_date',
@@ -39,6 +40,8 @@ class ProgramController extends Controller
         ], [
             'title.required'          => 'Sila isi nama program',
             'title.unique'            => 'Nama program telah wujud',
+            'program_code.required'          => 'Sila isi Kod Program',
+            'program_code.unique'            => 'Kod Program telah wujud',
             'start_date.required'     => 'Sila isi tarikh mula',
             'end_date.required'       => 'Sila isi tarikh tamat',
             'end_date.after_or_equal' => 'Tarikh tamat mesti selepas atau sama dengan tarikh mula',
@@ -75,6 +78,7 @@ class ProgramController extends Controller
     {
         $request->validate([
             'title'          => 'required|unique:programs,title,' . $id,
+            'program_code'   => 'required|unique:programs,program_code,',
             'description'    => 'nullable',
             'start_date'     => 'required|date',
             'end_date'       => 'required|date|after_or_equal:start_date',
@@ -83,6 +87,8 @@ class ProgramController extends Controller
         ], [
             'title.required'          => 'Sila isi nama program',
             'title.unique'            => 'Nama program telah wujud',
+            'program_code.required'          => 'Sila isi Kod Program',
+            'program_code.unique'            => 'Kod Program telah wujud',
             'start_date.required'     => 'Sila isi tarikh mula',
             'end_date.required'       => 'Sila isi tarikh tamat',
             'end_date.after_or_equal' => 'Tarikh tamat mesti selepas atau sama dengan tarikh mula',

@@ -17,6 +17,7 @@ class Program extends Model
 
     protected $fillable = [
         'title',
+        'program_code',
         'description',
         'start_date',
         'end_date',

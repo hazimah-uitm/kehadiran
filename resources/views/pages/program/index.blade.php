@@ -60,6 +60,7 @@
                         <tr>
                             <th>#</th>
                             <th>Program</th>
+                            <th>Kod Program</th>
                             <th>Tarikh</th>
                             <th>Lokasi</th>
                             <th>Status</th>
@@ -73,6 +74,7 @@
                                     <td>{{ $loop->iteration + ($programList->currentPage() - 1) * $programList->perPage() }}
                                     </td>
                                     <td>{{ $program->title }}</td>
+                                    <td>{{ $program->program_code }}</td>
                                     <td>
                                         @if ($program->start_date || $program->end_date)
                                             {{ \Carbon\Carbon::parse($program->start_date)->format('d/m/Y') }}
@@ -127,7 +129,7 @@
                             @endforeach
                         @else
                             <tr>
-                                <td colspan="6">Tiada rekod</td>
+                                <td colspan="7">Tiada rekod</td>
                             </tr>
                         @endif
                     </tbody>

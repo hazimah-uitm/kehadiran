@@ -38,6 +38,20 @@
                     @endif
                 </div>
 
+                {{-- Kod Program --}}
+                <div class="mb-3">
+                    <label for="program_code" class="form-label">Kod Program</label>
+                    <input type="text" class="form-control {{ $errors->has('program_code') ? 'is-invalid' : '' }}"
+                        id="program_code" name="program_code" value="{{ old('program_code') ?? ($program->program_code ?? '') }}">
+                    @if ($errors->has('program_code'))
+                        <div class="invalid-feedback">
+                            @foreach ($errors->get('program_code') as $error)
+                                {{ $error }}
+                            @endforeach
+                        </div>
+                    @endif
+                </div>
+
                 {{-- Keterangan --}}
                 <div class="mb-3">
                     <label for="description" class="form-label">Keterangan</label>

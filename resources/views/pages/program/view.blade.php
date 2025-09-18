@@ -35,6 +35,10 @@
                             <td>{{ $program->title }}</td>
                         </tr>
                         <tr>
+                            <th>Kod Program</th>
+                            <td>{{ $program->program_code }}</td>
+                        </tr>
+                        <tr>
                             <th>Keterangan</th>
                             <td>{{ $program->description ?? '-' }}</td>
                         </tr>
