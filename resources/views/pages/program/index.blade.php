@@ -103,6 +103,11 @@
                                             <i class="bx bx-calendar"></i> Sesi
                                         </a>
 
+                                        <a href="{{ route('participant', ['program' => $program->id]) }}"
+                                            class="btn btn-warning btn-sm">
+                                            <i class="bx bx-user"></i> Peserta
+                                        </a>
+
                                         <a href="{{ route('program.show', $program->id) }}" class="btn btn-primary btn-sm"
                                             data-bs-toggle="tooltip" data-bs-placement="bottom" title="Papar">
                                             <i class="bx bx-show"></i>
