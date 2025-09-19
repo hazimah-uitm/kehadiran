@@ -9,7 +9,7 @@
                 <ol class="breadcrumb mb-0 p-0">
                     <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="bx bx-home-alt"></i></a></li>
                     <li class="breadcrumb-item"><a href="{{ route('program') }}">Senarai Program</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Maklumat {{ $program->title }}</li>
+                    <li class="breadcrumb-item active" aria-current="page">Maklumat Program</li>
                 </ol>
             </nav>
         </div>
@@ -21,7 +21,7 @@
     </div>
     <!-- End Breadcrumb -->
 
-    <h6 class="mb-0 text-uppercase">Maklumat {{ $program->title }}</h6>
+    <h6 class="mb-0 text-uppercase">Maklumat Program</h6>
     <hr />
 
     <!-- Program Information Table -->

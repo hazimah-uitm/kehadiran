@@ -8,7 +8,7 @@
                     <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="bx bx-home-alt"></i></a></li>
                     <li class="breadcrumb-item"><a href="{{ route('program') }}">Senarai Program</a></li>
                     <li class="breadcrumb-item"><a href="{{ route('session', $program->id) }}">Senarai Sesi</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">{{ $session->title }}</li>
+                    <li class="breadcrumb-item active" aria-current="page">Maklumat Sesi</li>
                 </ol>
             </nav>
         </div>
@@ -18,7 +18,7 @@
         </div>
     </div>
 
-    <h6 class="mb-0 text-uppercase">Maklumat {{ $session->title }}</h6>
+    <h6 class="mb-0 text-uppercase">Maklumat Sesi</h6>
     <hr />
 
     <div class="card">

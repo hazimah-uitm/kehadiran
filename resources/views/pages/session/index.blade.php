@@ -10,7 +10,7 @@
                         <a href="{{ route('home') }}"><i class="bx bx-home-alt"></i></a>
                     </li>
                     <li class="breadcrumb-item"><a href="{{ route('program') }}">Senarai Program</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Senarai Sesi ({{ $program->title }})</li>
+                    <li class="breadcrumb-item active" aria-current="page">Senarai Sesi</li>
                 </ol>
             </nav>
         </div>
@@ -61,6 +61,7 @@
                     <thead>
                         <tr>
                             <th>#</th>
+                            <th>Program</th>
                             <th>Sesi</th>
                             <th>Masa</th>
                             <th>Venue</th>
@@ -73,6 +74,7 @@
                             @foreach ($sessions as $session)
                                 <tr>
                                     <td>{{ $loop->iteration + ($sessions->currentPage() - 1) * $sessions->perPage() }}</td>
+                                    <td>{{ $program->title }}</td>
                                     <td>{{ $session->title }}</td>
                                     <td>
                                         @if ($session->start_time || $session->end_time)
