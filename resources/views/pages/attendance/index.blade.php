@@ -77,8 +77,16 @@
                 {{-- (Optional) tambah butang lain jika perlu --}}
             </div>
 
+            <div class="mb-3">
+                <div><strong>Program:</strong> {{ $program->title }}</div>
+                @if (isset($session) && $session)
+                    <div><strong>Sesi:</strong> {{ $session->title }}</div>
+                    <div><strong>Lokasi:</strong> {{ $session->venue }}</div>
+                @endif
+            </div>
+
             <div class="table-responsive">
-                <table class="table">
+                <table class="table table-sm table-striped">
                     <thead>
                         <tr>
                             <th>#</th>
