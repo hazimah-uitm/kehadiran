@@ -34,9 +34,13 @@ Route::get('register', 'UserController@showPublicRegisterForm')->name('register'
 Route::post('register', 'UserController@storePublicRegister')->name('register.store');
 Route::get('/verify-email/{token}', 'UserController@verifyEmail')->name('verify.email');
 
-// PUBLIC: senarai program & sesi
+// Senarai program + butiran
 Route::get('/', 'ProgramController@publicIndex')->name('public.programs');
-Route::get('/program/{program}', 'ProgramController@publicShow')->name('public.program.detail');
+Route::get('/program/{id}', 'ProgramController@publicShow')->name('public.program.show');
+
+// Pendaftaran (public) ikut PROGRAM
+Route::get('/program/{programId}/register', 'ParticipantController@createPublic')->name('participant.public.create');
+Route::post('/program/{programId}/register', 'ParticipantController@storePublic')->name('participant.public.store');
 
 // PUBLIC: paparan/aksi kehadiran (contoh; sesuaikan dgn flow awak)
 Route::get('/attendance/{session}', 'AttendanceController@public')->name('attendance.public');

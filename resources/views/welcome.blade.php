@@ -41,33 +41,15 @@
                                 </p>
                             @endif
 
-                            <div class="mt-auto">
-                                @if ($program->sessions->count())
-                                    <div class="small fw-semibold mb-2">Sesi:</div>
-                                    <div class="list-group list-group-flush">
-                                        @foreach ($program->sessions as $session)
-                                            <div
-                                                class="list-group-item px-0 d-flex justify-content-between align-items-start">
-                                                <div class="me-2">
-                                                    <div class="fw-semibold">{{ $session->title ?? 'Sesi' }}</div>
-                                                    <div class="small text-muted">
-                                                        @if (!empty($session->start_time) && !empty($session->end_time))
-                                                            {{ \Carbon\Carbon::parse($session->start_time)->format('d M Y, h:i A') }}
-                                                            –
-                                                            {{ \Carbon\Carbon::parse($session->end_time)->format('h:i A') }}
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                                <a href="{{ route('attendance.public', $session->id) }}"
-                                                    class="btn btn-sm btn-primary">Kehadiran</a>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                @else
-                                    <div class="alert alert-light border small m-0">Tiada sesi buat masa ini.</div>
-                                @endif
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                {{-- Butang Pendaftaran (kiri) --}}
+                                <a href="{{ route('participant.public.create', $program->id) }}"
+                                    class="btn btn-primary btn-sm">
+                                    Pendaftaran
+                                </a>
 
-                                <a href="{{ route('public.program.detail', $program->id) }}" class="btn btn-link px-0 mt-2">
+                                {{-- Pautan Butiran Program (kanan) --}}
+                                <a href="{{ route('public.program.show', $program->id) }}" class="btn btn-info btn-sm">
                                     Butiran Program →
                                 </a>
                             </div>

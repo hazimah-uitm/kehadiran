@@ -5,12 +5,90 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Program;
 use App\Models\Participant;
+use BaconQrCode\Encoder\QrCode;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use SimpleSoftwareIO\QrCode\Facades\QrCode as FacadesQrCode;
 
 class ParticipantController extends Controller
 {
+public function createPublic($programId)
+{
+    $program = Program::with('sessions')
+        ->where('publish_status', 1)
+        ->findOrFail($programId);
+
+    return view('pages.public.participant.form', [
+        'program'    => $program,
+        'save_route' => route('participant.public.store', $program->id),
+        'str_mode'   => 'Pendaftaran Peserta',
+    ]);
+}
+
+public function storePublic($programId, Request $request)
+{
+    $program = Program::with('sessions')
+        ->where('publish_status', 1)
+        ->findOrFail($programId);
+
+    $request->validate([
+        'name'             => 'required|string|max:191',
+        'ic_passport'      => 'required|string|max:191|unique:participants,ic_passport,NULL,id,program_id,' . $program->id,
+        'student_staff_id' => 'nullable|string|max:191',
+        'nationality'      => 'nullable|string|max:191',
+        'phone_no'         => 'nullable|string|max:30',
+        'institution'      => 'nullable|string|max:191',
+    ], [
+        'name.required'        => 'Sila isi nama peserta',
+        'ic_passport.required' => 'Sila isi IC/Passport',
+        'ic_passport.unique'   => 'IC/Passport ini telah wujud dalam program ini',
+        'ic_passport.max'      => 'IC/Passport tidak boleh melebihi 191 aksara',
+        'phone_no.max'         => 'No. Telefon tidak boleh melebihi 30 aksara',
+    ]);
+
+    $prefix = $this->sanitizePrefix($program->program_code ?: 'PRG');
+
+    [$participant, $code] = DB::transaction(function () use ($program, $request, $prefix) {
+        $participant = \App\Models\Participant::create([
+            'program_id'       => $program->id,
+            'name'             => $request->name,
+            'ic_passport'      => $request->ic_passport,
+            'student_staff_id' => $request->student_staff_id,
+            'nationality'      => $request->nationality,
+            'phone_no'         => $request->phone_no,
+            'institution'      => $request->institution,
+        ]);
+
+        $count = \App\Models\Participant::withTrashed()
+            ->where('program_id', $program->id)
+            ->whereNotNull('participant_code')
+            ->count();
+
+        $next = $count + 1;
+        $code = $prefix . '-' . str_pad($next, 3, '0', STR_PAD_LEFT);
+
+        $dir  = "qrcodes/{$program->id}";
+        $file = "{$dir}/participant_{$participant->id}.png";
+        if (!Storage::disk('public')->exists($dir)) {
+            Storage::disk('public')->makeDirectory($dir);
+        }
+        $png = FacadesQrCode::format('png')->size(300)->margin(1)->generate($code);
+        Storage::disk('public')->put($file, $png);
+
+        $participant->update([
+            'participant_code' => $code,
+            'qr_path'          => $file,
+        ]);
+
+        return [$participant, $code];
+    });
+
+    return redirect()
+        ->route('public.program.show', $program->id)
+        ->with('success', "Pendaftaran berjaya. Kod Peserta: {$code}");
+}
+
+
     public function index(Program $program, Request $request)
     {
         $perPage = $request->input('perPage', 10);

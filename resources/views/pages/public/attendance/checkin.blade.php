@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container py-4" style="max-width:720px;">
-        <a href="{{ route('public.programs') }}" class="btn btn-link px-0 mb-3">← Kembali ke Senarai</a>
+        <a href="{{ route('public.programs') }}" class="btn btn-info btn-sm mb-3">← Kembali</a>
 
         <div class="card shadow-sm border-0">
             <div class="card-body">
