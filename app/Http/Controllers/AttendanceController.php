@@ -10,6 +10,59 @@ use Illuminate\Http\Request;
 
 class AttendanceController extends Controller
 {
+    public function public($sessionId)
+    {
+        $session = Session::where('publish_status', 1)->findOrFail($sessionId);
+
+        // Return view borang kehadiran awam
+        return view('pages.public.attendance.checkin', compact('session'));
+    }
+
+    public function storePublic(Request $request, $sessionId)
+    {
+        $request->validate([
+            'participant_code' => 'required|string|max:191',
+        ], [
+            'participant_code.required' => 'Sila masukkan Kod Peserta atau No. IC',
+        ]);
+
+        $session = Session::with('program')
+            ->where('publish_status', 1)
+            ->findOrFail($sessionId);
+
+        if ((int) ($session->program->publish_status ?? 0) !== 1) {
+            return back()->with('error', 'Program belum diterbitkan.');
+        }
+
+        $code = trim($request->input('participant_code'));
+
+        // Benarkan cari ikut participant_code ATAU ic_passport
+        $participant = Participant::where('program_id', $session->program->id)
+            ->where(function ($q) use ($code) {
+                $q->where('participant_code', $code)
+                    ->orWhere('ic_passport', $code);
+            })
+            ->first();
+
+        if (!$participant) {
+            return back()
+                ->withErrors(['participant_code' => 'Peserta tidak ditemui untuk program ini.'])
+                ->withInput();
+        }
+
+        Attendance::firstOrCreate(
+            [
+                'program_id'     => $session->program->id,
+                'session_id'     => $session->id,
+                'participant_id' => $participant->id,
+            ],
+            [
+                'participant_code' => $participant->participant_code, // simpan untuk rujukan pantas
+            ]
+        );
+
+        return back()->with('success', 'Kehadiran berjaya direkodkan untuk: ' . $participant->name);
+    }
 
     public function indexProgram(Program $program, Request $request)
     {

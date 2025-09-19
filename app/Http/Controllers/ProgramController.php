@@ -7,6 +7,32 @@ use App\Models\Program;
 
 class ProgramController extends Controller
 {
+    public function publicIndex(Request $request)
+    {
+        $perPage = (int) $request->input('perPage', 12);
+
+        $programs = Program::with(['sessions' => function ($q) {
+            $q->where('publish_status', 1)
+                ->orderBy('start_time', 'asc');
+        }])
+            ->where('publish_status', 1)
+            // Optional: tunjuk yg sedang/akan berlangsung dulu
+            ->orderBy('start_date', 'desc')
+            ->paginate($perPage);
+
+        return view('welcome', compact('programs', 'perPage'));
+    }
+
+    public function publicShow($programId)
+    {
+        $program = Program::with('sessions')
+            ->where('publish_status', 1)
+            ->findOrFail($programId);
+
+        // Return view borang kehadiran awam
+        return view('pages.public.program.show', compact('program'));
+    }
+
     public function index(Request $request)
     {
         $perPage = $request->input('perPage', 10);
@@ -78,7 +104,7 @@ class ProgramController extends Controller
     {
         $request->validate([
             'title'          => 'required|unique:programs,title,' . $id,
-            'program_code'   => 'required|unique:programs,program_code,',
+            'program_code'   => 'required|unique:programs,program_code,' . $id,
             'description'    => 'nullable',
             'start_date'     => 'required|date',
             'end_date'       => 'required|date|after_or_equal:start_date',

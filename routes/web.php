@@ -13,9 +13,9 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('auth.login');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 Route::get('/manual-pengguna', function () {
     return redirect(url('public/storage/Manual Pengguna Sistem Kehadiran.pdf'));
@@ -33,6 +33,17 @@ Route::post('/first-time', 'UserController@handleFirstTime')->name('firsttime.ha
 Route::get('register', 'UserController@showPublicRegisterForm')->name('register');
 Route::post('register', 'UserController@storePublicRegister')->name('register.store');
 Route::get('/verify-email/{token}', 'UserController@verifyEmail')->name('verify.email');
+
+// PUBLIC: senarai program & sesi
+Route::get('/', 'ProgramController@publicIndex')->name('public.programs');
+Route::get('/program/{program}', 'ProgramController@publicShow')->name('public.program.detail');
+
+// PUBLIC: paparan/aksi kehadiran (contoh; sesuaikan dgn flow awak)
+Route::get('/attendance/{session}', 'AttendanceController@public')->name('attendance.public');
+
+// PUBLIC Attendance (Check-in)
+Route::get('/attendance/{session}', 'AttendanceController@public')->name('attendance.public');
+Route::post('/attendance/{session}/checkin', 'AttendanceController@storePublic')->name('attendance.public.store');
 
 // Password Reset Routes
 Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
