@@ -10,8 +10,7 @@
                     <li class="breadcrumb-item"><a href="{{ route('program') }}">Senarai Program</a></li>
                     @if (isset($session) && $session)
                         <li class="breadcrumb-item">
-                            <a href="{{ route('session', ['program' => $program->id]) }}">Senarai Sesi
-                                ({{ $program->title }})</a>
+                            <a href="{{ route('session', ['program' => $program->id]) }}">Senarai Sesi</a>
                         </li>
                         <li class="breadcrumb-item">
                             <a
