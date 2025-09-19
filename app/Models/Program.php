@@ -29,4 +29,9 @@ class Program extends Model
     {
         return $this->attributes['publish_status'] ? 'Aktif' : 'Tidak Aktif';
     }
+
+    public function sessions()
+    {
+        return $this->hasMany(Session::class);
+    }
 }

@@ -11,7 +11,7 @@ class ProgramController extends Controller
     {
         $perPage = $request->input('perPage', 10);
 
-        $programList = Program::latest()->paginate($perPage);
+        $programList = Program::withCount('sessions')->paginate($perPage);
 
         return view('pages.program.index', [
             'programList' => $programList,

@@ -100,6 +100,11 @@
                                             </a>
                                         @endhasanyrole
 
+                                        <a href="{{ route('attendance.index.session', ['program' => $program->id, 'session' => $session->id]) }}"
+                                            class="btn btn-sm btn-success">
+                                            <i class="bx bx-list-check"></i> Kehadiran
+                                        </a>
+
                                         <a href="{{ route('session.show', [$program->id, $session->id]) }}"
                                             class="btn btn-primary btn-sm" data-bs-toggle="tooltip"
                                             data-bs-placement="bottom" title="Papar">

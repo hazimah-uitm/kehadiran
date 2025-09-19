@@ -110,6 +110,13 @@
                                             <i class="bx bx-user"></i> Peserta
                                         </a>
 
+                                        @if ($program->sessions_count == 0)
+                                            <a href="{{ route('attendance.index.program', $program->id) }}"
+                                                class="btn btn-sm btn-success">
+                                                <i class="bx bx-list-check"></i> Kehadiran
+                                            </a>
+                                        @endif
+
                                         <a href="{{ route('program.show', $program->id) }}" class="btn btn-primary btn-sm"
                                             data-bs-toggle="tooltip" data-bs-placement="bottom" title="Papar">
                                             <i class="bx bx-show"></i>

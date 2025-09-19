@@ -164,6 +164,26 @@ Route::middleware('auth')->group(function () {
         Route::delete('participant/{participant}', 'ParticipantController@destroy')->name('participant.destroy')->where('participant', '[0-9]+');
     });
 
+    // Attendance
+    Route::get('program/{program}/attendance', 'AttendanceController@indexProgram')->name('attendance.index.program');
+    Route::get('program/{program}/session/{session}/attendance', 'AttendanceController@indexSession')->name('attendance.index.session');
+
+    // Search
+    Route::get('program/{program}/attendance/search', 'AttendanceController@searchProgram')->name('attendance.search.program');
+    Route::get('program/{program}/session/{session}/attendance/search', 'AttendanceController@searchSession')->name('attendance.search.session');
+
+    // Create (papar borang urusetia)
+    Route::get('program/{program}/attendance/create', 'AttendanceController@createProgram')->name('attendance.create.program');
+    Route::get('program/{program}/session/{session}/attendance/create', 'AttendanceController@createSession')->name('attendance.create.session');
+
+    // Attendance by program
+    Route::get('program/{program}/attendance/create', 'AttendanceController@createProgram')->name('attendance.create.program');
+    Route::post('program/{program}/attendance',        'AttendanceController@storeProgram')->name('attendance.store.program');
+
+    // Attendance by session
+    Route::get('program/{program}/session/{session}/attendance/create', 'AttendanceController@createSession')->name('attendance.create.session');
+    Route::post('program/{program}/session/{session}/attendance',        'AttendanceController@storeSession')->name('attendance.store.session');
+
     //Position
     Route::get('position/create', 'PositionController@create')->name('position.create');
     Route::post('position/store', 'PositionController@store')->name('position.store');
