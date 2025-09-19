@@ -98,7 +98,7 @@ a {
 	margin-top: 0;
 	margin-bottom: 0;
 	letter-spacing: 8px;
-	color: #fff;
+	color: #3F3F46;
 }
 
 .logo-subtitle-login {
@@ -1195,5 +1195,18 @@ input.search-control-2::placeholder {
 
 	.topbar .navbar .dropdown-menu {
 		width: 100% !important
+	}
+}
+
+.wrapper-main {
+	padding-top: 4rem;
+	/* Adjust this value based on the height of your navbar */
+}
+
+/* Media query to adjust padding for smaller screens if needed */
+@media (max-width: 768px) {
+	.wrapper-main {
+		padding-top: 4rem;
+		/* You may need more padding on smaller screens */
 	}
 }

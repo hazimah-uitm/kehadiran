@@ -44,6 +44,8 @@ Route::post('/program/{programId}/register', 'ParticipantController@storePublic'
 
 // PUBLIC: paparan/aksi kehadiran (contoh; sesuaikan dgn flow awak)
 Route::get('/attendance/{session}', 'AttendanceController@public')->name('attendance.public');
+Route::get('/program/{programId}/participant/{participantId}', 'ParticipantController@showPublic')
+    ->name('public.participant.show');
 
 // PUBLIC Attendance (Check-in)
 Route::get('/attendance/{session}', 'AttendanceController@public')->name('attendance.public');

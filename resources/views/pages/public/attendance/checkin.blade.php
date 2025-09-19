@@ -1,46 +1,57 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container py-4" style="max-width:720px;">
-        <a href="{{ route('public.programs') }}" class="btn btn-info btn-sm mb-3">← Kembali</a>
+    <div class="wrapper-main">
+        <div class="container py-4" style="max-width:720px;">
+            <a href="{{ route('public.programs') }}" class="btn btn-info btn-sm mb-3">← Kembali</a>
 
-        <div class="card shadow-sm border-0">
-            <div class="card-body">
-                {{-- Konteks supaya pengguna yakin --}}
-                <h4 class="mb-0">{{ $session->program->title }}</h4>
-                <div class="small text-muted mb-2">Kod: {{ $session->program->program_code }}</div>
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    {{-- Konteks supaya pengguna yakin --}}
+                    <h4 class="mb-0">{{ $session->program->title }}</h4>
+                    <div class="small text-muted mb-2">Kod: {{ $session->program->program_code }}</div>
 
-                {{-- Mesej berjaya (kalau ada) --}}
-                @if (session('success'))
-                    <div class="alert alert-success">{{ session('success') }}</div>
-                @endif
+                    {{-- Mesej berjaya (kalau ada) --}}
+                    @if (session('success'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ session('success') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    @endif
+                    @if (session('error'))
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {{ session('error') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    @endif
 
-                <form method="POST" action="{{ route('attendance.public.store', $session->id) }}" id="attendanceForm"
-                    autocomplete="off">
-                    {{ csrf_field() }}
+                    <form method="POST" action="{{ route('attendance.public.store', $session->id) }}" id="attendanceForm"
+                        autocomplete="off">
+                        {{ csrf_field() }}
 
-                    <div class="mb-3">
-                        <label for="participant_code" class="form-label">Kod Peserta</label>
-                        <input type="text" id="participant_code" name="participant_code"
-                            class="form-control {{ $errors->has('participant_code') ? 'is-invalid' : '' }}"
-                            value="{{ old('participant_code') }}" placeholder="Imbas kod atau taip kod peserta"
-                            autofocus>
-                        @if ($errors->has('participant_code'))
-                            <div class="invalid-feedback">
-                                @foreach ($errors->get('participant_code') as $error)
-                                    {{ $error }}
-                                @endforeach
-                            </div>
-                        @endif
+                        <div class="mb-3">
+                            <label for="participant_code" class="form-label">Kod Peserta</label>
+                            <input type="text" id="participant_code" name="participant_code"
+                                class="form-control {{ $errors->has('participant_code') ? 'is-invalid' : '' }}"
+                                value="{{ old('participant_code') }}" placeholder="Imbas kod atau taip kod peserta"
+                                autofocus>
+                            @if ($errors->has('participant_code'))
+                                <div class="invalid-feedback">
+                                    @foreach ($errors->get('participant_code') as $error)
+                                        {{ $error }}
+                                    @endforeach
+                                </div>
+                            @endif
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Hantar</button>
+                        <button type="button" class="btn btn-outline-secondary ms-1" id="clearBtn">Reset</button>
+                    </form>
+
+                    <div class="mt-3 small text-muted">
+                        Tip: Letak kursor dalam kotak di atas, imbas, dan pastikan scanner hantar kekunci “Enter” atau biar
+                        sistem auto-submit.
                     </div>
-
-                    <button type="submit" class="btn btn-primary">Hantar</button>
-                    <button type="button" class="btn btn-outline-secondary ms-1" id="clearBtn">Reset</button>
-                </form>
-
-                <div class="mt-3 small text-muted">
-                    Tip: Letak kursor dalam kotak di atas, imbas, dan pastikan scanner hantar kekunci “Enter” atau biar
-                    sistem auto-submit.
                 </div>
             </div>
         </div>

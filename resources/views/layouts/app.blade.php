@@ -24,7 +24,7 @@
   @media (min-width: 992px){ :root { --nav-h: 72px; } }
 
   /* ruang untuk elak content/alert berlaga dengan navbar fixed */
-  body { margin: 0; padding-top: calc(var(--nav-h) + 8px); }
+  /* body { margin: 0; padding-top: calc(var(--nav-h) + 8px); } */
 
   .custom-navbar { 
     background:#fff; 
@@ -79,7 +79,7 @@
     <!-- End Navbar -->
 
     <!-- Floating alerts -->
-    <div class="container mt-2">
+    {{-- <div class="container mt-2">
         @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ session('success') }}
@@ -92,7 +92,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
-    </div>
+    </div> --}}
 
     {{-- PAGE CONTENT --}}
     @yield('content')
