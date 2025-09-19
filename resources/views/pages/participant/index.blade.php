@@ -10,7 +10,7 @@
                         <a href="{{ route('home') }}"><i class="bx bx-home-alt"></i></a>
                     </li>
                     <li class="breadcrumb-item"><a href="{{ route('program') }}">Senarai Program</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Senarai Peserta ({{ $program->title }})</li>
+                    <li class="breadcrumb-item active" aria-current="page">Senarai Peserta</li>
                 </ol>
             </nav>
         </div>
@@ -22,7 +22,7 @@
     </div>
     <!--end breadcrumb-->
 
-    <h6 class="mb-0 text-uppercase">Senarai Peserta</h6>
+    <h6 class="mb-0 text-uppercase">Senarai Peserta ({{ $program->title }})</h6>
     <hr />
 
     <div class="card">

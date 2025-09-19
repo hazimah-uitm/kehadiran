@@ -47,7 +47,7 @@
             Program ({{ $program->title }})
         @endif
     </h6>
-    
+
     <hr />
 
     <div class="card">

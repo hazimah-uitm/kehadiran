@@ -12,8 +12,17 @@
                         <li class="breadcrumb-item">
                             <a href="{{ route('session', ['program' => $program->id]) }}">Senarai Sesi ({{ $program->title }})</a>
                         </li>
+                        <li class="breadcrumb-item">
+                            <a
+                                href="{{ route('attendance.index.session', ['program' => $program->id, 'session' => $session->id]) }}">Senarai Kehadiran
+                            </a>
+                        </li>
                         <li class="breadcrumb-item active" aria-current="page">Kehadiran Sesi</li>
                     @else
+                        <li class="breadcrumb-item">
+                            <a href="{{ route('attendance.index.program', $program->id) }}">Senarai Kehadiran
+                            </a>
+                        </li>
                         <li class="breadcrumb-item active" aria-current="page">Kehadiran Program</li>
                     @endif
                 </ol>

@@ -74,7 +74,7 @@
                             @foreach ($sessions as $session)
                                 <tr>
                                     <td>{{ $loop->iteration + ($sessions->currentPage() - 1) * $sessions->perPage() }}</td>
-                                    <td>{{ $program->title }}</td>
+                                    <td class="text-wrap">{{ $program->title }}</td>
                                     <td>{{ $session->title }}</td>
                                     <td>
                                         @if ($session->start_time || $session->end_time)
@@ -127,7 +127,7 @@
                             @endforeach
                         @else
                             <tr>
-                                <td colspan="6">Tiada rekod</td>
+                                <td colspan="7">Tiada rekod</td>
                             </tr>
                         @endif
                     </tbody>
