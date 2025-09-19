@@ -23,7 +23,8 @@ class CreateParticipantsTable extends Migration
             $table->string('nationality')->nullable();
             $table->string('phone_no')->nullable();
             $table->string('institution')->nullable();
-
+            $table->string('participant_code', 40)->nullable(); // contoh: AICAD-001
+            $table->string('qr_path')->nullable(); 
             $table->softDeletes();
             $table->timestamps();
 
@@ -33,10 +34,12 @@ class CreateParticipantsTable extends Migration
 
             // Unik per program (elak dua rekod IC/Passport sama dalam program sama)
             $table->unique(['program_id', 'ic_passport']);
+            $table->unique(['program_id', 'participant_code']);
 
             // Index carian
             $table->index(['program_id', 'name']);
             $table->index(['program_id', 'institution']);
+            $table->index(['program_id', 'participant_code']);
         });
     }
 

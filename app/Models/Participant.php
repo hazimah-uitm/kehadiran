@@ -24,6 +24,8 @@ class Participant extends Model
         'nationality',
         'phone_no',
         'institution',
+        'participant_code',
+        'qr_path',
     ];
 
     public function program()

@@ -29,11 +29,12 @@
         <div class="card-body">
             <div class="d-lg-flex align-items-center mb-4 gap-3">
                 <div class="position-relative">
-                    <form action="{{ route('participant.search', ['program' => $program->id]) }}" method="GET" id="searchForm"
-                          class="d-lg-flex align-items-center gap-3">
+                    <form action="{{ route('participant.search', ['program' => $program->id]) }}" method="GET"
+                        id="searchForm" class="d-lg-flex align-items-center gap-3">
                         <div class="input-group">
-                            <input type="text" class="form-control rounded" placeholder="Carian nama/IC/telefon/institusi..."
-                                   name="search" value="{{ request('search') }}" id="searchInput">
+                            <input type="text" class="form-control rounded"
+                                placeholder="Carian nama/IC/telefon/institusi..." name="search"
+                                value="{{ request('search') }}" id="searchInput">
 
                             <input type="hidden" name="perPage" value="{{ request('perPage', 10) }}">
                             <button type="submit" class="btn btn-primary ms-1 rounded" id="searchButton">
@@ -49,7 +50,7 @@
                 @hasanyrole('Superadmin|Admin')
                     <div class="ms-auto">
                         <a href="{{ route('participant.create', ['program' => $program->id]) }}"
-                           class="btn btn-primary radius-30 mt-2 mt-lg-0">
+                            class="btn btn-primary radius-30 mt-2 mt-lg-0">
                             <i class="bx bxs-plus-square"></i> Tambah Peserta
                         </a>
                     </div>
@@ -59,53 +60,82 @@
             <div class="table-responsive">
                 <table class="table">
                     <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Nama</th>
-                        <th>IC/Passport</th>
-                        <th>No. Telefon</th>
-                        <th>Institusi</th>
-                        <th style="width:180px">Tindakan</th>
-                    </tr>
+                        <tr>
+                            <th>#</th>
+                            <th>Nama</th>
+                            <th>IC/Passport</th>
+                            <th>No. Telefon</th>
+                            <th>Kod Peserta</th>
+                            <th>Kod QR</th>
+                            <th>Institusi</th>
+                            <th style="width:180px">Tindakan</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    @if ($participants->count() > 0)
-                        @foreach ($participants as $p)
+                        @if ($participants->count() > 0)
+                            @foreach ($participants as $p)
+                                <tr>
+                                    <td>{{ $loop->iteration + ($participants->currentPage() - 1) * $participants->perPage() }}
+                                    </td>
+                                    <td>{{ $p->name }}</td>
+                                    <td>{{ $p->ic_passport }}</td>
+                                    <td>{{ $p->phone_no ?? '-' }}</td>
+                                    <td>
+                                        @if ($p->participant_code)
+                                            <div class="input-group input-group-sm" style="max-width:220px">
+                                                <input type="text" class="form-control"
+                                                    value="{{ $p->participant_code }}" readonly>
+                                                <button type="button" class="btn btn-secondary"
+                                                    onclick="navigator.clipboard.writeText('{{ $p->participant_code }}')">Salin</button>
+                                            </div>
+                                        @else
+                                            <span class="text-muted">-</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if ($p->qr_path)
+                                            <img src="{{ asset('public/storage/' . $p->qr_path) }}" alt="QR"
+                                                style="height:56px">
+                                            <div><a class="btn btn-sm btn-primary mt-1"
+                                                    href="{{ asset('public/storage/' . $p->qr_path) }}" download>Muat Turun</a>
+                                            </div>
+                                        @else
+                                            <span class="text-muted">-</span>
+                                        @endif
+                                    </td>
+                                    <td>{{ $p->institution ?? '-' }}</td>
+                                    <td>
+                                        @hasanyrole('Superadmin|Admin')
+                                            <a href="{{ route('participant.edit', ['program' => $program->id, 'participant' => $p->id]) }}"
+                                                class="btn btn-info btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                title="Kemaskini">
+                                                <i class="bx bxs-edit"></i>
+                                            </a>
+                                        @endhasanyrole
+
+                                        <a href="{{ route('participant.show', ['program' => $program->id, 'participant' => $p->id]) }}"
+                                            class="btn btn-primary btn-sm" data-bs-toggle="tooltip"
+                                            data-bs-placement="bottom" title="Papar">
+                                            <i class="bx bx-show"></i>
+                                        </a>
+
+                                        @hasanyrole('Superadmin|Admin')
+                                            <a type="button" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                data-bs-title="Padam">
+                                                <span class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                                    data-bs-target="#deleteModal{{ $p->id }}">
+                                                    <i class="bx bx-trash"></i>
+                                                </span>
+                                            </a>
+                                        @endhasanyrole
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @else
                             <tr>
-                                <td>{{ $loop->iteration + ($participants->currentPage() - 1) * $participants->perPage() }}</td>
-                                <td>{{ $p->name }}</td>
-                                <td>{{ $p->ic_passport }}</td>
-                                <td>{{ $p->phone_no ?? '-' }}</td>
-                                <td>{{ $p->institution ?? '-' }}</td>
-                                <td>
-                                    @hasanyrole('Superadmin|Admin')
-                                        <a href="{{ route('participant.edit', ['program' => $program->id, 'participant' => $p->id]) }}"
-                                           class="btn btn-info btn-sm" data-bs-toggle="tooltip"
-                                           data-bs-placement="bottom" title="Kemaskini">
-                                            <i class="bx bxs-edit"></i>
-                                        </a>
-                                    @endhasanyrole
-
-                                    <a href="{{ route('participant.show', ['program' => $program->id, 'participant' => $p->id]) }}"
-                                       class="btn btn-primary btn-sm" data-bs-toggle="tooltip"
-                                       data-bs-placement="bottom" title="Papar">
-                                        <i class="bx bx-show"></i>
-                                    </a>
-
-                                    @hasanyrole('Superadmin|Admin')
-                                        <a type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Padam">
-                                            <span class="btn btn-danger btn-sm" data-bs-toggle="modal"
-                                                  data-bs-target="#deleteModal{{ $p->id }}">
-                                                <i class="bx bx-trash"></i>
-                                            </span>
-                                        </a>
-                                    @endhasanyrole
-                                </td>
+                                <td colspan="8">Tiada rekod</td>
                             </tr>
-                        @endforeach
-                    @else
-                        <tr><td colspan="6">Tiada rekod</td></tr>
-                    @endif
+                        @endif
                     </tbody>
                 </table>
             </div>
@@ -113,11 +143,11 @@
             <div class="mt-3 d-flex justify-content-between">
                 <div class="d-flex align-items-center">
                     <span class="mr-2 mx-1">Jumlah rekod per halaman</span>
-                    <form action="{{ route('participant.search', ['program' => $program->id]) }}" method="GET" id="perPageForm"
-                          class="d-flex align-items-center">
+                    <form action="{{ route('participant.search', ['program' => $program->id]) }}" method="GET"
+                        id="perPageForm" class="d-flex align-items-center">
                         <input type="hidden" name="search" value="{{ request('search') }}">
                         <select name="perPage" id="perPage" class="form-select form-select-sm"
-                                onchange="document.getElementById('perPageForm').submit()">
+                            onchange="document.getElementById('perPageForm').submit()">
                             <option value="10" {{ Request::get('perPage') == '10' ? 'selected' : '' }}>10</option>
                             <option value="20" {{ Request::get('perPage') == '20' ? 'selected' : '' }}>20</option>
                             <option value="30" {{ Request::get('perPage') == '30' ? 'selected' : '' }}>30</option>
@@ -146,7 +176,7 @@
     <!-- Delete Confirmation Modal -->
     @foreach ($participants as $p)
         <div class="modal fade" id="deleteModal{{ $p->id }}" tabindex="-1" aria-labelledby="deleteModalLabel"
-             aria-hidden="true">
+            aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -159,9 +189,8 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                        <form class="d-inline"
-                              method="POST"
-                              action="{{ route('participant.destroy', ['program' => $program->id, 'participant' => $p->id]) }}">
+                        <form class="d-inline" method="POST"
+                            action="{{ route('participant.destroy', ['program' => $program->id, 'participant' => $p->id]) }}">
                             {{ method_field('delete') }}
                             {{ csrf_field() }}
                             <button type="submit" class="btn btn-danger">Padam</button>

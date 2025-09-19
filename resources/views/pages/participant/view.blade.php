@@ -51,6 +51,36 @@
                             <td>{{ $participant->phone_no ?? '-' }}</td>
                         </tr>
                         <tr>
+                            <th>Kod Peserta</th>
+                            <td>
+                                @if ($participant->participant_code)
+                                    <div class="input-group input-group-sm" style="max-width:220px">
+                                        <input type="text" class="form-control"
+                                            value="{{ $participant->participant_code }}" readonly>
+                                        <button type="button" class="btn btn-secondary"
+                                            onclick="navigator.clipboard.writeText('{{ $participant->participant_code }}')">Salin</button>
+                                    </div>
+                                @else
+                                    <span class="text-muted">-</span>
+                                @endif
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Kod QR</th>
+                            <td>
+                                @if ($participant->qr_path)
+                                    <img src="{{ asset('public/storage/' . $participant->qr_path) }}" alt="QR"
+                                        style="height:56px">
+                                    <div><a class="btn btn-sm btn-primary mt-1"
+                                            href="{{ asset('public/storage/' . $participant->qr_path) }}" download>Muat
+                                            Turun</a>
+                                    </div>
+                                @else
+                                    <span class="text-muted">-</span>
+                                @endif
+                            </td>
+                        </tr>
+                        <tr>
                             <th>Institusi</th>
                             <td>{{ $participant->institution ?? '-' }}</td>
                         </tr>
