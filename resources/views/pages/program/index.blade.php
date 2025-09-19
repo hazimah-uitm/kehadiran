@@ -73,7 +73,7 @@
                                 <tr>
                                     <td>{{ $loop->iteration + ($programList->currentPage() - 1) * $programList->perPage() }}
                                     </td>
-                                    <td>{{ $program->title }}</td>
+                                    <td class="text-wrap">{{ $program->title }}</td>
                                     <td>{{ $program->program_code }}</td>
                                     <td>
                                         @if ($program->start_date || $program->end_date)
