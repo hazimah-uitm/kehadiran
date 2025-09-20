@@ -165,19 +165,19 @@ Route::middleware('auth')->group(function () {
 
     // PARTICIPANTS
     Route::prefix('program/{program}')->group(function () {
-        Route::get('participant',                 'ParticipantController@index')->name('participant');
-        Route::get('participant/search',          'ParticipantController@search')->name('participant.search');
+        Route::get('participant', 'ParticipantController@index')->name('participant');
+        Route::get('participant/search', 'ParticipantController@search')->name('participant.search');
 
-        Route::get('participant/trash',           'ParticipantController@trashList')->name('participant.trash');
-        Route::get('participant/{id}/restore',    'ParticipantController@restore')->name('participant.restore');
+        Route::get('participant/trash', 'ParticipantController@trashList')->name('participant.trash');
+        Route::get('participant/{id}/restore', 'ParticipantController@restore')->name('participant.restore');
         Route::delete('participant/{id}/force-delete', 'ParticipantController@forceDelete')->name('participant.forceDelete');
 
-        Route::get('participant/create',          'ParticipantController@create')->name('participant.create');
-        Route::post('participant',                'ParticipantController@store')->name('participant.store');
+        Route::get('participant/create', 'ParticipantController@create')->name('participant.create');
+        Route::post('participant', 'ParticipantController@store')->name('participant.store');
 
-        Route::get('participant/{participant}',   'ParticipantController@show')->name('participant.show')->where('participant', '[0-9]+');
+        Route::get('participant/{participant}', 'ParticipantController@show')->name('participant.show')->where('participant', '[0-9]+');
         Route::get('participant/{participant}/edit', 'ParticipantController@edit')->name('participant.edit')->where('participant', '[0-9]+');
-        Route::put('participant/{participant}',   'ParticipantController@update')->name('participant.update')->where('participant', '[0-9]+');
+        Route::put('participant/{participant}', 'ParticipantController@update')->name('participant.update')->where('participant', '[0-9]+');
         Route::delete('participant/{participant}', 'ParticipantController@destroy')->name('participant.destroy')->where('participant', '[0-9]+');
     });
 
@@ -195,11 +195,11 @@ Route::middleware('auth')->group(function () {
 
     // Attendance by program
     Route::get('program/{program}/attendance/create', 'AttendanceController@createProgram')->name('attendance.create.program');
-    Route::post('program/{program}/attendance',        'AttendanceController@storeProgram')->name('attendance.store.program');
+    Route::post('program/{program}/attendance', 'AttendanceController@storeProgram')->name('attendance.store.program');
 
     // Attendance by session
     Route::get('program/{program}/session/{session}/attendance/create', 'AttendanceController@createSession')->name('attendance.create.session');
-    Route::post('program/{program}/session/{session}/attendance',        'AttendanceController@storeSession')->name('attendance.store.session');
+    Route::post('program/{program}/session/{session}/attendance', 'AttendanceController@storeSession')->name('attendance.store.session');
 
     //Position
     Route::get('position/create', 'PositionController@create')->name('position.create');

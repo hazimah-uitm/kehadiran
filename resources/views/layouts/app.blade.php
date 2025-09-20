@@ -59,9 +59,6 @@
 
                     @hasanyrole('Superadmin|Admin')
                         <li class="nav-item">
-                            <a class="nav-link text-uppercase" href="{{ route('attendance.create') }}">Kehadiran</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link text-uppercase" href="{{ route('home') }}">Dashboard</a>
                         </li>
                         <li class="nav-item">
