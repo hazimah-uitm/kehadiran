@@ -83,11 +83,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="d-flex justify-content-end">
-                            <a href="{{ route('manual-pengguna') }}" target="_blank" class="btn btn-info btn-sm"><i
-                                    class="bx bxs-file-pdf me-2"></i>Manual Pengguna
-                            </a>
-                        </div>
                     </div>
                 </div>
             </div>

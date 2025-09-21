@@ -23,12 +23,6 @@
             <div class="menu-title">Dashboard</div>
         </a>
     </li>
-    <li>
-        <a href="{{ route('manual-pengguna') }}" target="_blank">
-            <div class="parent-icon"><i class='bx bxs-bookmark'></i></div>
-            <div class="menu-title">Manual Pengguna</div>
-        </a>
-    </li>
 
 
     @role('Superadmin')
