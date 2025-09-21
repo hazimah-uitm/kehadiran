@@ -16,10 +16,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link href="{{ asset('public/assets/css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('public/assets/css/icons.css') }}" rel="stylesheet">
-    {{-- CSS Select2 + tema Bootstrap 4/5 --}}
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme@1.6.2/dist/select2-bootstrap4.min.css"
-        rel="stylesheet">
+    {{-- Tom Select CSS + JS --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.bootstrap5.min.css">
+
     <title>{{ config('app.name', 'Sistem Kehadiran') }}</title>
     <style>
         /* tinggi anggaran navbar */
@@ -64,22 +63,22 @@
                     </li>
 
                     @guest
-                        <li class="nav-item">
-                            <a class="nav-link text-uppercase" href="{{ route('login') }}">Log Masuk Admin</a>
-                        </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-uppercase" href="{{ route('login') }}">Log Masuk Admin</a>
+                    </li>
                     @endguest
 
                     @hasanyrole('Superadmin|Admin')
-                        <li class="nav-item">
-                            <a class="nav-link text-uppercase" href="{{ route('home') }}">Dashboard</a>
-                        </li>
-                        <li class="nav-item">
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="ms-lg-2">
-                                {{ csrf_field() }}
-                                <button type="submit" class="btn btn-sm btn-outline-dark text-uppercase">Log
-                                    Keluar</button>
-                            </form>
-                        </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-uppercase" href="{{ route('home') }}">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="ms-lg-2">
+                            {{ csrf_field() }}
+                            <button type="submit" class="btn btn-sm btn-outline-dark text-uppercase">Log
+                                Keluar</button>
+                        </form>
+                    </li>
                     @endhasanyrole
                 </ul>
             </div>
@@ -113,11 +112,8 @@
     <script src="{{ asset('public/assets/plugins/metismenu/js/metisMenu.min.js') }}"></script>
     <script src="{{ asset('public/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js') }}"></script>
     <script src="{{ asset('public/assets/js/app.js') }}"></script>
-    <!-- Select2 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
-    <!-- Select2 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
 </body>
 
 </html>
