@@ -8,7 +8,8 @@
                 <ol class="breadcrumb mb-0 p-0">
                     <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="bx bx-home-alt"></i></a></li>
                     <li class="breadcrumb-item"><a href="{{ route('program') }}">Senarai Program</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('admin.participant', ['program' => $program->id]) }}">Senarai
+                    <li class="breadcrumb-item"><a
+                            href="{{ route('admin.participant', ['program' => $program->id]) }}">Senarai
                             Peserta</a></li>
                     <li class="breadcrumb-item active" aria-current="page">{{ $str_mode }} Peserta</li>
                 </ol>
@@ -81,18 +82,58 @@
 
                 <div class="mb-3 row">
                     <div class="col-md-6">
-                        <label for="nationality" class="form-label">Warganegara</label>
-                        <input type="text" id="nationality" name="nationality"
-                            class="form-control {{ $errors->has('nationality') ? 'is-invalid' : '' }}"
-                            value="{{ old('nationality', $participant->nationality ?? '') }}">
-                        @if ($errors->has('nationality'))
-                            <div class="invalid-feedback">
-                                @foreach ($errors->get('nationality') as $error)
-                                    {{ $error }}
-                                @endforeach
+                                <label for="nationality" class="form-label">Warganegara</label>
+                                <select id="nationality" name="nationality"
+                                    class="form-select select2 {{ $errors->has('nationality') ? 'is-invalid' : '' }}"
+                                    data-placeholder="Pilih Negara">
+                                    <option value="">-- Pilih Negara --</option>
+                                    @php
+                                        $asiaCountries = [
+                                            'Afghanistan',
+                                            'Bangladesh',
+                                            'Brunei',
+                                            'Cambodia',
+                                            'China',
+                                            'India',
+                                            'Indonesia',
+                                            'Japan',
+                                            'Kazakhstan',
+                                            'Kyrgyzstan',
+                                            'Laos',
+                                            'Malaysia',
+                                            'Maldives',
+                                            'Mongolia',
+                                            'Myanmar',
+                                            'Nepal',
+                                            'Pakistan',
+                                            'Philippines',
+                                            'Singapore',
+                                            'South Korea',
+                                            'Sri Lanka',
+                                            'Taiwan',
+                                            'Tajikistan',
+                                            'Thailand',
+                                            'Timor-Leste',
+                                            'Turkey',
+                                            'Uzbekistan',
+                                            'Vietnam',
+                                        ];
+                                    @endphp
+                                    @foreach ($asiaCountries as $country)
+                                        <option value="{{ $country }}"
+                                            {{ old('nationality', $participant->nationality ?? '') == $country ? 'selected' : '' }}>
+                                            {{ $country }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @if ($errors->has('nationality'))
+                                    <div class="invalid-feedback">
+                                        @foreach ($errors->get('nationality') as $error)
+                                            {{ $error }}
+                                        @endforeach
+                                    </div>
+                                @endif
                             </div>
-                        @endif
-                    </div>
 
                     <div class="col-md-6">
                         <label for="phone_no" class="form-label">No. Telefon</label>
@@ -127,4 +168,15 @@
             </form>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            $('#nationality').select2({
+                theme: 'bootstrap4',
+                placeholder: $('#nationality').data('placeholder'),
+                allowClear: true,
+                width: '100%'
+            });
+        });
+    </script>
 @endsection

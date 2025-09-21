@@ -75,25 +75,98 @@
 
                             <div class="col-md-6">
                                 <label class="form-label">No. Staf/Pelajar (UiTM sahaja)</label>
-                                <input type="text" name="student_staff_id" value="{{ old('student_staff_id') }}"
-                                    class="form-control">
+                                <input type="text" id="student_staff_id" name="student_staff_id"
+                                    class="form-control {{ $errors->has('student_staff_id') ? 'is-invalid' : '' }}"
+                                    value="{{ old('student_staff_id', $participant->student_staff_id ?? '') }}">
+                                @if ($errors->has('student_staff_id'))
+                                    <div class="invalid-feedback">
+                                        @foreach ($errors->get('student_staff_id') as $error)
+                                            {{ $error }}
+                                        @endforeach
+                                    </div>
+                                @endif
                             </div>
 
                             <div class="col-md-6">
-                                <label class="form-label">Warganegara</label>
-                                <input type="text" name="nationality" value="{{ old('nationality') }}"
-                                    class="form-control">
+                                <label for="nationality" class="form-label">Warganegara</label>
+                                <select id="nationality" name="nationality"
+                                    class="form-select select2 {{ $errors->has('nationality') ? 'is-invalid' : '' }}"
+                                    data-placeholder="Pilih Negara">
+                                    <option value="">-- Pilih Negara --</option>
+                                    @php
+                                        $asiaCountries = [
+                                            'Afghanistan',
+                                            'Bangladesh',
+                                            'Brunei',
+                                            'Cambodia',
+                                            'China',
+                                            'India',
+                                            'Indonesia',
+                                            'Japan',
+                                            'Kazakhstan',
+                                            'Kyrgyzstan',
+                                            'Laos',
+                                            'Malaysia',
+                                            'Maldives',
+                                            'Mongolia',
+                                            'Myanmar',
+                                            'Nepal',
+                                            'Pakistan',
+                                            'Philippines',
+                                            'Singapore',
+                                            'South Korea',
+                                            'Sri Lanka',
+                                            'Taiwan',
+                                            'Tajikistan',
+                                            'Thailand',
+                                            'Timor-Leste',
+                                            'Turkey',
+                                            'Uzbekistan',
+                                            'Vietnam',
+                                        ];
+                                    @endphp
+                                    @foreach ($asiaCountries as $country)
+                                        <option value="{{ $country }}"
+                                            {{ old('nationality', $participant->nationality ?? '') == $country ? 'selected' : '' }}>
+                                            {{ $country }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @if ($errors->has('nationality'))
+                                    <div class="invalid-feedback">
+                                        @foreach ($errors->get('nationality') as $error)
+                                            {{ $error }}
+                                        @endforeach
+                                    </div>
+                                @endif
                             </div>
 
                             <div class="col-md-6">
                                 <label class="form-label">No. Telefon</label>
-                                <input type="text" name="phone_no" value="{{ old('phone_no') }}" class="form-control">
+                                <input type="text" id="phone_no" name="phone_no"
+                                    class="form-control {{ $errors->has('phone_no') ? 'is-invalid' : '' }}"
+                                    value="{{ old('phone_no', $participant->phone_no ?? '') }}">
+                                @if ($errors->has('phone_no'))
+                                    <div class="invalid-feedback">
+                                        @foreach ($errors->get('phone_no') as $error)
+                                            {{ $error }}
+                                        @endforeach
+                                    </div>
+                                @endif
                             </div>
 
                             <div class="col-md-6">
                                 <label class="form-label">Institusi / Organisasi</label>
-                                <input type="text" name="institution" value="{{ old('institution') }}"
-                                    class="form-control">
+                                <input type="text" id="institution" name="institution"
+                                    class="form-control {{ $errors->has('institution') ? 'is-invalid' : '' }}"
+                                    value="{{ old('institution', $participant->institution ?? '') }}">
+                                @if ($errors->has('institution'))
+                                    <div class="invalid-feedback">
+                                        @foreach ($errors->get('institution') as $error)
+                                            {{ $error }}
+                                        @endforeach
+                                    </div>
+                                @endif
                             </div>
                         </div>
 
@@ -103,7 +176,8 @@
                             <i class="bx bx-info-circle fs-6 mt-1"></i>
                             <div>
                                 Kod peserta dan QR akan dijana secara automatik selepas pendaftaran berjaya.
-                                Sila <strong>simpan Kod Peserta &amp; QR Code</strong> untuk rekod kehadiran anda semasa program.
+                                Sila <strong>simpan Kod Peserta &amp; QR Code</strong> untuk rekod kehadiran anda semasa
+                                program.
                             </div>
                         </div>
 
@@ -117,4 +191,14 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            $('#nationality').select2({
+                theme: 'bootstrap4',
+                placeholder: $('#nationality').data('placeholder'),
+                allowClear: true,
+                width: '100%'
+            });
+        });
+    </script>
 @endsection
