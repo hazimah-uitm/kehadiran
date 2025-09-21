@@ -55,22 +55,6 @@
 
                 <hr class="my-2" />
 
-                {{-- Mesej berjaya / gagal --}}
-                @if (session('success'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    {!! session('success') !!}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-                @endif
-
-                @if (session('info'))
-                <div class="alert alert-info alert-dismissible fade show" role="alert">
-                    {!! session('info') !!}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-                @endif
-
-
                 {{-- Borang kehadiran (by program / by sesi) --}}
                 <form method="POST" action="{{ $postRoute }}" id="attendanceForm" autocomplete="off">
                     {{ csrf_field() }}
@@ -85,6 +69,21 @@
                             <div class="p-2 rounded small bg-danger-subtle border border-danger">
                                 {!! session('error') !!}
                             </div>
+                        </div>
+                        @endif
+
+                        {{-- Mesej berjaya / gagal --}}
+                        @if (session('success'))
+                        <div class="alert alert-success alert-dismissible fade show mt-2" role="alert">
+                            {!! session('success') !!}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        @endif
+
+                        @if (session('info'))
+                        <div class="alert alert-info alert-dismissible fade show mt-2" role="alert">
+                            {!! session('info') !!}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                         @endif
                     </div>
