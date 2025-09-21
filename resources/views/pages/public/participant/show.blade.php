@@ -5,7 +5,7 @@
 @section('content')
 <div class="wrapper-main">
     <div class="container py-4" style="max-width:980px;">
-        <a href="{{ route('public.programs'}}" class="btn btn-info btn-sm mb-3">← Kembali</a>
+        <a href="{{ route('public.programs') }}" class="btn btn-info btn-sm mb-3">← Kembali</a>
 
         {{-- Alert inline (ikut layout public) --}}
         @if (session('success'))
