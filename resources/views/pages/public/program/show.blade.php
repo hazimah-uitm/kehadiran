@@ -33,8 +33,8 @@
                                         <i class="bx bx-calendar me-1 text-info"></i> Tarikh
                                     </th>
                                     <td>
-                                        {{ \Carbon\Carbon::parse($program->start_time)->format('d/m/Y H:i') }}
-                                        – {{ \Carbon\Carbon::parse($program->end_time)->format('d/m/Y H:i') }}
+                                        {{ \Carbon\Carbon::parse($program->start_time)->format('d/m/Y') }}
+                                        – {{ \Carbon\Carbon::parse($program->end_time)->format('d/m/Y') }}
                                     </td>
                                 </tr>
                                 <tr>

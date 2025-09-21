@@ -52,6 +52,14 @@ Route::post('program/{program}/attendance', 'AttendanceController@storeProgram')
 Route::get('program/{program}/session/{session}/attendance/create', 'AttendanceController@createSession')->name('attendance.create.session');
 Route::post('program/{program}/session/{session}/attendance', 'AttendanceController@storeSession')->name('attendance.store.session');
 
+// Semak kod peserta
+Route::get('/program/{programId}/semak', 'ParticipantController@checkForm')
+    ->name('public.participant.check');
+
+Route::post('/program/{programId}/semak', 'ParticipantController@checkSubmit')
+    ->name('public.participant.check.submit')
+    ->middleware('throttle:20,1');
+    
 // Password Reset Routes
 Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
 Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');

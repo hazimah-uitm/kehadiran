@@ -17,21 +17,29 @@
     <link href="{{ asset('public/assets/css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('public/assets/css/icons.css') }}" rel="stylesheet">
     <title>{{ config('app.name', 'Sistem Kehadiran') }}</title>
+    <style>
+        /* tinggi anggaran navbar */
+        :root {
+            --nav-h: 64px;
+        }
 
-<style>
-  /* tinggi anggaran navbar */
-  :root { --nav-h: 64px; }
-  @media (min-width: 992px){ :root { --nav-h: 72px; } }
+        @media (min-width: 992px) {
+            :root {
+                --nav-h: 72px;
+            }
+        }
 
-  /* ruang untuk elak content/alert berlaga dengan navbar fixed */
-  /* body { margin: 0; padding-top: calc(var(--nav-h) + 8px); } */
+        /* ruang untuk elak content/alert berlaga dengan navbar fixed */
+        /* body { margin: 0; padding-top: calc(var(--nav-h) + 8px); } */
 
-  .custom-navbar { 
-    background:#fff; 
-    box-shadow:0 2px 8px rgba(0,0,0,.06);
-    z-index: 1040; /* pastikan sentiasa di atas */
-  }
-</style>
+        .custom-navbar {
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .06);
+            z-index: 1040;
+            /* pastikan sentiasa di atas */
+        }
+    </style>
+    @yield('head')
 </head>
 
 <body>
@@ -52,22 +60,22 @@
                     </li>
 
                     @guest
-                        <li class="nav-item">
-                            <a class="nav-link text-uppercase" href="{{ route('login') }}">Log Masuk Admin</a>
-                        </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-uppercase" href="{{ route('login') }}">Log Masuk Admin</a>
+                    </li>
                     @endguest
 
                     @hasanyrole('Superadmin|Admin')
-                        <li class="nav-item">
-                            <a class="nav-link text-uppercase" href="{{ route('home') }}">Dashboard</a>
-                        </li>
-                        <li class="nav-item">
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="ms-lg-2">
-                                {{ csrf_field() }}
-                                <button type="submit" class="btn btn-sm btn-outline-dark text-uppercase">Log
-                                    Keluar</button>
-                            </form>
-                        </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-uppercase" href="{{ route('home') }}">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="ms-lg-2">
+                            {{ csrf_field() }}
+                            <button type="submit" class="btn btn-sm btn-outline-dark text-uppercase">Log
+                                Keluar</button>
+                        </form>
+                    </li>
                     @endhasanyrole
                 </ul>
             </div>
@@ -80,15 +88,15 @@
         @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        @endif
-        @if (session('error'))
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                {{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        @endif
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    @endif
+    @if (session('error'))
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ session('error') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    @endif
     </div> --}}
 
     {{-- PAGE CONTENT --}}

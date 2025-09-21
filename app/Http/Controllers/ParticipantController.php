@@ -6,12 +6,79 @@ use Illuminate\Http\Request;
 use App\Models\Program;
 use App\Models\Participant;
 use BaconQrCode\Encoder\QrCode;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use SimpleSoftwareIO\QrCode\Facades\QrCode as FacadesQrCode;
 
 class ParticipantController extends Controller
 {
+    public function checkForm($programId)
+    {
+        // Program mesti published
+        $program = Program::where('publish_status', 1)->findOrFail($programId);
+
+        return view('pages.public.participant.check', compact('program'));
+    }
+
+    public function checkSubmit($programId, Request $request)
+    {
+        // ringankan brute-force: extra cache-based cooldown ringan (optional)
+        $key = 'check_ic_' . $request->ip();
+        if (Cache::has($key)) {
+            return back()->withErrors(['ic_passport' => 'Cuba lagi sebentar lagi.'])->withInput();
+        }
+        Cache::put($key, 1, now()->addSeconds(2));
+
+        $program = Program::where('publish_status', 1)->findOrFail($programId);
+
+        $request->validate([
+            'ic_passport' => 'required|string|max:191',
+        ], [
+            'ic_passport.required' => 'Sila masukkan IC/Passport.',
+            'ic_passport.max'      => 'IC/Passport tidak boleh melebihi 191 aksara.',
+        ]);
+
+        $participant = Participant::where('program_id', $program->id)
+            ->where('ic_passport', $request->ic_passport)
+            ->first();
+
+        if (!$participant) {
+            return back()->withErrors(['ic_passport' => 'Rekod tidak ditemui untuk program ini.'])->withInput();
+        }
+
+        // Pastikan QR wujud; kalau hilang, jana semula menggunakan participant_code sedia ada
+        if (!$participant->participant_code) {
+            // fallback: kalau entah macam mana tiada kod (kasus lama), kau boleh generate atau block
+            return back()->withErrors(['ic_passport' => 'Kod peserta belum tersedia. Sila hubungi urus setia.']);
+        }
+
+        if (empty($participant->qr_path) || !Storage::disk('public')->exists($participant->qr_path)) {
+            $this->regenerateParticipantQr($program->id, $participant);
+        }
+
+        // Redirect ke paparan peserta (public)
+        return redirect()->route('public.participant.show', [$program->id, $participant->id]);
+    }
+
+    /** Helper: jana semula QR peserta jika fail tiada */
+    private function regenerateParticipantQr($programId, Participant $participant)
+    {
+        $dir  = "qrcodes/{$programId}";
+        $file = "{$dir}/participant_{$participant->id}.png";
+
+        if (!Storage::disk('public')->exists($dir)) {
+            Storage::disk('public')->makeDirectory($dir);
+        }
+
+        $png = \SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')
+            ->size(300)->margin(1)->generate($participant->participant_code);
+
+        Storage::disk('public')->put($file, $png);
+
+        $participant->update(['qr_path' => $file]);
+    }
+
     public function showPublic($programId, $participantId)
     {
         // Program mesti published
