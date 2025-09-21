@@ -9,7 +9,7 @@
                     <div class="d-flex align-items-center justify-content-center flex-column flex-md-row mb-4">
                         <img src="{{ asset('public/assets/images/putih.png') }}" class="logo-icon-login" alt="logo icon">
                         <div class="ms-3">
-                            <h4 class="logo-text-login mb-0">SISTEM KEHADIRAN</h4>
+                            <h4 class="logo-text-login mb-0">ATTENDANCE SYSTEM</h4>
                         </div>
                     </div>
                 </div>
@@ -20,14 +20,14 @@
                             <div class="card-body p-3">
                                 <div class="border p-3 rounded">
                                     <div class="text-center mb-2">
-                                        <h3 class="">Daftar Akaun</h3>
+                                        <h3 class="">Account Registration</h3>
                                     </div>
                                     <form method="POST" action="{{ route('register.store') }}">
                                         {{ csrf_field() }}
 
                                         <div class="row g-2">
                                             <div class="col-md-6">
-                                                <label for="name" class="form-label">Nama Penuh</label>
+                                                <label for="name" class="form-label">Full Name</label>
                                                 <input type="text"
                                                     class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}"
                                                     id="name" name="name" value="{{ old('name') }}" required>
@@ -41,7 +41,7 @@
                                             </div>
 
                                             <div class="col-md-6">
-                                                <label for="staff_id" class="form-label">No. Pekerja</label>
+                                                <label for="staff_id" class="form-label">Staff ID</label>
                                                 <input type="text"
                                                     class="form-control {{ $errors->has('staff_id') ? 'is-invalid' : '' }}"
                                                     id="staff_id" name="staff_id" value="{{ old('staff_id') }}" required>
@@ -55,7 +55,7 @@
                                             </div>
 
                                             <div class="col-md-6">
-                                                <label for="email" class="form-label">Alamat Emel UiTM <small
+                                                <label for="email" class="form-label">UiTM Email Address<small
                                                         class="text-muted">(@uitm.edu.my / @student.uitm.edu.my)</small>
                                                 </label>
                                                 <input type="email"
@@ -71,7 +71,7 @@
                                             </div>
 
                                             <div class="col-md-6">
-                                                <label for="phone_no" class="form-label">No. Telefon</label>
+                                                <label for="phone_no" class="form-label">Phone No.</label>
                                                 <input type="text"
                                                     class="form-control {{ $errors->has('phone_no') ? 'is-invalid' : '' }}"
                                                     id="phone_no" name="phone_no" value="{{ old('phone_no') }}">
@@ -85,11 +85,11 @@
                                             </div>
 
                                             <div class="col-md-6">
-                                                <label for="position_id" class="form-label">Jawatan</label>
+                                                <label for="position_id" class="form-label">Position</label>
                                                 <select
                                                     class="form-select {{ $errors->has('position_id') ? 'is-invalid' : '' }}"
                                                     id="position_id" name="position_id" required>
-                                                    <option value="" disabled selected>Pilih Jawatan</option>
+                                                    <option value="" disabled selected>Select Position</option>
                                                     @foreach ($positionList as $position)
                                                         <option value="{{ $position->id }}"
                                                             {{ old('position_id') == $position->id ? 'selected' : '' }}>
@@ -111,7 +111,7 @@
                                                 <select
                                                     class="form-select {{ $errors->has('ptj_id') ? 'is-invalid' : '' }}"
                                                     id="ptj_id" name="ptj_id" required>
-                                                    <option value="" disabled selected>Pilih PTJ</option>
+                                                    <option value="" disabled selected>Select PTJ</option>
                                                     @foreach ($ptjList as $ptj)
                                                         <option value="{{ $ptj->id }}"
                                                             {{ old('ptj_id') == $ptj->id ? 'selected' : '' }}>
@@ -129,11 +129,11 @@
                                             </div>
 
                                             <div class="col-md-6">
-                                                <label for="campus_id" class="form-label">Kampus</label>
+                                                <label for="campus_id" class="form-label">Campus</label>
                                                 <select
                                                     class="form-select {{ $errors->has('campus_id') ? 'is-invalid' : '' }}"
                                                     id="campus_id" name="campus_id" required>
-                                                    <option value="" disabled selected>Pilih Kampus</option>
+                                                    <option value="" disabled selected>Select campus</option>
                                                     @foreach ($campusList as $campus)
                                                         <option value="{{ $campus->id }}"
                                                             {{ old('campus_id') == $campus->id ? 'selected' : '' }}>
@@ -151,7 +151,7 @@
                                             </div>
 
                                             <div class="col-md-6">
-                                                <label for="password" class="form-label">Kata Laluan</label>
+                                                <label for="password" class="form-label">Password</label>
                                                 <input type="password"
                                                     class="form-control {{ $errors->has('password') ? 'is-invalid' : '' }}"
                                                     id="password" name="password" required>
@@ -165,21 +165,20 @@
                                             </div>
 
                                             <div class="col-md-6">
-                                                <label for="password-confirm" class="form-label">Sahkan Kata
-                                                    Laluan</label>
+                                                <label for="password-confirm" class="form-label">Confirm Password</label>
                                                 <input type="password" class="form-control" id="password-confirm"
                                                     name="password_confirmation" required>
                                             </div>
 
                                             <div class="col-12 d-grid mt-3">
                                                 <button type="submit" class="btn btn-primary">
-                                                    <i class="bx bxs-user-plus"></i> Daftar Akaun
+                                                    <i class="bx bxs-user-plus"></i> Register Account
                                                 </button>
                                             </div>
 
                                             <div class="col-12 text-center">
-                                                <p class="mb-0 mt-2">Sudah ada akaun? <a href="{{ route('login') }}">Log
-                                                        Masuk</a></p>
+                                                <p class="mb-0 mt-2">Have an account? <a href="{{ route('login') }}">Log
+                                                        In</a></p>
                                             </div>
                                         </div>
                                     </form>

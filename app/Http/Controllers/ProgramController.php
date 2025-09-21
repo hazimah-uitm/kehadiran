@@ -49,7 +49,7 @@ class ProgramController extends Controller
     {
         return view('pages.program.form', [
             'save_route' => route('program.store'),
-            'str_mode' => 'Tambah',
+            'str_mode' => 'Add',
         ]);
     }
 
@@ -64,22 +64,22 @@ class ProgramController extends Controller
             'venue'          => 'required',
             'publish_status' => 'required|in:1,0',
         ], [
-            'title.required'          => 'Sila isi nama program',
-            'title.unique'            => 'Nama program telah wujud',
-            'program_code.required'          => 'Sila isi Kod Program',
-            'program_code.unique'            => 'Kod Program telah wujud',
-            'start_date.required'     => 'Sila isi tarikh mula',
-            'end_date.required'       => 'Sila isi tarikh tamat',
-            'end_date.after_or_equal' => 'Tarikh tamat mesti selepas atau sama dengan tarikh mula',
-            'venue.required'          => 'Sila isi tempat program',
-            'publish_status.required' => 'Sila pilih status',
+            'title.required'          => 'Please enter the program name',
+            'title.unique'            => 'Program name already exists',
+            'program_code.required'   => 'Please enter the program code',
+            'program_code.unique'     => 'Program code already exists',
+            'start_date.required'     => 'Please enter the start date',
+            'end_date.required'       => 'Please enter the end date',
+            'end_date.after_or_equal' => 'The end date must be the same as or later than the start date',
+            'venue.required'          => 'Please enter the program venue',
+            'publish_status.required' => 'Please select a status',
         ]);
 
         $program = new Program();
         $program->fill($request->all());
         $program->save();
 
-        return redirect()->route('program')->with('success', 'Maklumat berjaya disimpan');
+        return redirect()->route('program')->with('success', 'Information saved successfully');
     }
 
     public function show($id)
@@ -111,22 +111,22 @@ class ProgramController extends Controller
             'venue'          => 'required',
             'publish_status' => 'required|in:1,0',
         ], [
-            'title.required'          => 'Sila isi nama program',
-            'title.unique'            => 'Nama program telah wujud',
-            'program_code.required'          => 'Sila isi Kod Program',
-            'program_code.unique'            => 'Kod Program telah wujud',
-            'start_date.required'     => 'Sila isi tarikh mula',
-            'end_date.required'       => 'Sila isi tarikh tamat',
-            'end_date.after_or_equal' => 'Tarikh tamat mesti selepas atau sama dengan tarikh mula',
-            'venue.required'          => 'Sila isi tempat program',
-            'publish_status.required' => 'Sila pilih status',
+            'title.required'          => 'Please enter the program name',
+            'title.unique'            => 'Program name already exists',
+            'program_code.required'   => 'Please enter the program code',
+            'program_code.unique'     => 'Program code already exists',
+            'start_date.required'     => 'Please enter the start date',
+            'end_date.required'       => 'Please enter the end date',
+            'end_date.after_or_equal' => 'The end date must be the same as or later than the start date',
+            'venue.required'          => 'Please enter the program venue',
+            'publish_status.required' => 'Please select a status',
         ]);
 
         $program = Program::findOrFail($id);
         $program->fill($request->all());
         $program->save();
 
-        return redirect()->route('program')->with('success', 'Maklumat berjaya dikemaskini');
+        return redirect()->route('program')->with('success', 'Information updated successfully');
     }
 
     public function search(Request $request)
@@ -151,7 +151,7 @@ class ProgramController extends Controller
         $program = Program::findOrFail($id);
         $program->delete();
 
-        return redirect()->route('program')->with('success', 'Maklumat berjaya dihapuskan');
+        return redirect()->route('program')->with('success', 'Information deleted successfully');
     }
 
     public function trashList()
@@ -167,7 +167,7 @@ class ProgramController extends Controller
     {
         Program::withTrashed()->where('id', $id)->restore();
 
-        return redirect()->route('program')->with('success', 'Maklumat berjaya dikembalikan');
+        return redirect()->route('program')->with('success', 'Information restored successfully');
     }
 
     public function forceDelete($id)
@@ -175,6 +175,6 @@ class ProgramController extends Controller
         $program = Program::withTrashed()->findOrFail($id);
         $program->forceDelete();
 
-        return redirect()->route('program.trash')->with('success', 'Maklumat berjaya dihapuskan sepenuhnya');
+        return redirect()->route('program.trash')->with('success', 'Information deleted permanently');
     }
 }

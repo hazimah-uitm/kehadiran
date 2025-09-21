@@ -23,7 +23,7 @@ class AttendanceController extends Controller
         $request->validate([
             'participant_code' => 'required|string|max:191',
         ], [
-            'participant_code.required' => 'Sila masukkan Kod Peserta atau No. IC',
+            'participant_code.required' => 'Please enter participant code or scan QR code',
         ]);
 
         $session = Session::with('program')
@@ -31,7 +31,7 @@ class AttendanceController extends Controller
             ->findOrFail($sessionId);
 
         if ((int) ($session->program->publish_status ?? 0) !== 1) {
-            return back()->with('error', 'Program belum diterbitkan.');
+            return back()->with('error', 'Program has not been published.');
         }
 
         $code = trim($request->input('participant_code'));
@@ -46,7 +46,7 @@ class AttendanceController extends Controller
 
         if (!$participant) {
             return back()
-                ->withErrors(['participant_code' => 'Peserta tidak ditemui untuk program ini.'])
+                ->withErrors(['participant_code' => 'Participant not found for this program.'])
                 ->withInput();
         }
 
@@ -61,7 +61,7 @@ class AttendanceController extends Controller
             ]
         );
 
-        return back()->with('success', 'Kehadiran berjaya direkodkan untuk: ' . $participant->name);
+        return back()->with('success', 'Attendance successfully recorded for: ' . $participant->name);
     }
 
     public function indexProgram(Program $program, Request $request)
@@ -165,7 +165,7 @@ class AttendanceController extends Controller
             ->first();
 
         if (!$participant) {
-            return back()->withErrors(['participant_code' => 'Kod peserta tidak sah'])->withInput();
+            return back()->withErrors(['participant_code' => 'Invalid participant code'])->withInput();
         }
 
         Attendance::firstOrCreate([
@@ -176,7 +176,7 @@ class AttendanceController extends Controller
             'participant_code' => $request->participant_code,
         ]);
 
-        return back()->with('success', 'Kehadiran berjaya direkodkan.');
+        return back()->with('success', 'Attendance recorded successfully.');
     }
 
     // Simpan attendance (by session)
@@ -190,7 +190,7 @@ class AttendanceController extends Controller
             ->first();
 
         if (!$participant) {
-            return back()->withErrors(['participant_code' => 'Kod peserta tidak sah'])->withInput();
+            return back()->withErrors(['participant_code' => 'Invalid participant code'])->withInput();
         }
 
         Attendance::firstOrCreate([
@@ -201,6 +201,6 @@ class AttendanceController extends Controller
             'participant_code' => $request->participant_code,
         ]);
 
-        return back()->with('success', 'Kehadiran sesi berjaya direkodkan.');
+        return back()->with('success', 'Attendance recorded successfully.');
     }
 }

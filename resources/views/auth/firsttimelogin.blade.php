@@ -8,7 +8,7 @@
                     <div class="d-flex align-items-center justify-content-center flex-column flex-md-row mb-4">
                         <img src="{{ asset('public/assets/images/putih.png') }}" class="logo-icon-login" alt="logo icon">
                         <div class="ms-3">
-                            <h4 class="logo-text-login mb-0">SISTEM KEHADIRAN</h4>
+                            <h4 class="logo-text-login mb-0">ATTENDANCE SYSTEM</h4>
                         </div>
                     </div>
                 </div>
@@ -18,9 +18,8 @@
                             <div class="card-body">
                                 <div class="border p-4 rounded">
                                     <div class="text-center mb-4">
-                                        <h3 class="">Penghantaran Semula Pautan Pengesahan</h3>
-                                        <p class="text-muted">Masukkan alamat emel anda untuk menerima pautan pengesahan
-                                            emel baru
+                                        <h3 class="">Resend Verification Link</h3>
+                                        <p class="text-muted">Enter your email address to receive a new verification link.
                                         </p>
                                     </div>
 
@@ -43,15 +42,15 @@
                                     <form method="POST" action="{{ route('firsttimelogin.send') }}">
                                         {{ csrf_field() }}
                                         <div class="mb-3">
-                                            <label for="email" class="form-label">Emel UiTM</label>
+                                            <label for="email" class="form-label">UiTM Email Address</label>
                                             <input type="email" class="form-control" id="email" name="email"
                                                 required value="{{ old('email') }}">
                                         </div>
                                         <div class="d-grid">
-                                            <button type="submit" class="btn btn-primary">Hantar Pautan</button>
+                                            <button type="submit" class="btn btn-primary">Send Link</button>
                                         </div>
                                         <div class="mt-3 text-center">
-                                            <a href="{{ route('login') }}">Kembali ke Log Masuk</a>
+                                            <a href="{{ route('login') }}">Back to Log In</a>
                                         </div>
                                     </form>
                                 </div>

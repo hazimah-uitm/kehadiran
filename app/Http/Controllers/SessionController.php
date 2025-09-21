@@ -28,8 +28,8 @@ class SessionController extends Controller
     {
         return view('pages.session.form', [
             'program'   => $program,
-            'save_route'=> route('session.store', $program->id),
-            'str_mode'  => 'Tambah',
+            'save_route' => route('session.store', $program->id),
+            'str_mode'  => 'Add',
         ]);
     }
 
@@ -42,12 +42,12 @@ class SessionController extends Controller
             'end_time'       => 'required|date|after_or_equal:start_time',
             'publish_status' => 'required|in:1,0',
         ], [
-            'title.required'          => 'Sila isi nama sesi',
-            'venue.required'          => 'Sila isi tempat / venue sesi',
-            'start_time.required'     => 'Sila isi tarikh & masa mula',
-            'end_time.required'       => 'Sila isi tarikh & masa tamat',
-            'end_time.after_or_equal' => 'Mesti selepas atau sama dengan masa mula',
-            'publish_status.required' => 'Sila pilih status',
+            'title.required'          => 'Please enter the session name',
+            'venue.required'          => 'Please enter the session venue',
+            'start_time.required'     => 'Please enter the start date & time',
+            'end_time.required'       => 'Please enter the end date & time',
+            'end_time.after_or_equal' => 'Must be the same as or later than the start time',
+            'publish_status.required' => 'Please select a status',
         ]);
 
         $session = new Session();
@@ -56,12 +56,12 @@ class SessionController extends Controller
         $session->venue         = $request->venue;
         $session->start_time    = $request->start_time;
         $session->end_time      = $request->end_time;
-        $session->publish_status= $request->publish_status;
+        $session->publish_status = $request->publish_status;
         $session->save();
 
         return redirect()
             ->route('session', $program->id)
-            ->with('success', 'Sesi berjaya disimpan');
+            ->with('success', 'Session details saved successfully');
     }
 
     public function show(Program $program, Session $session)
@@ -83,7 +83,7 @@ class SessionController extends Controller
             'program'    => $program,
             'session'    => $session,
             'save_route' => route('session.update', [$program->id, $session->id]),
-            'str_mode'   => 'Kemas Kini',
+            'str_mode'   => 'Edit',
         ]);
     }
 
@@ -98,12 +98,12 @@ class SessionController extends Controller
             'end_time'       => 'required|date|after_or_equal:start_time',
             'publish_status' => 'required|in:1,0',
         ], [
-            'title.required'          => 'Sila isi nama sesi',
-            'venue.required'          => 'Sila isi tempat / venue sesi',
-            'start_time.required'     => 'Sila isi tarikh & masa mula',
-            'end_time.required'       => 'Sila isi tarikh & masa tamat',
-            'end_time.after_or_equal' => 'Mesti selepas atau sama dengan masa mula',
-            'publish_status.required' => 'Sila pilih status',
+            'title.required'          => 'Please enter the session name',
+            'venue.required'          => 'Please enter the session venue',
+            'start_time.required'     => 'Please enter the start date & time',
+            'end_time.required'       => 'Please enter the end date & time',
+            'end_time.after_or_equal' => 'Must be the same as or later than the start time',
+            'publish_status.required' => 'Please select a status',
         ]);
 
         $session->title          = $request->title;
@@ -115,7 +115,7 @@ class SessionController extends Controller
 
         return redirect()
             ->route('session', $program->id)
-            ->with('success', 'Sesi berjaya dikemaskini');
+            ->with('success', 'Session details updated successfully');
     }
 
     public function destroy(Program $program, Session $session)
@@ -126,7 +126,7 @@ class SessionController extends Controller
 
         return redirect()
             ->route('session', $program->id)
-            ->with('success', 'Sesi berjaya dihapuskan');
+            ->with('success', 'Session details deleted successfully');
     }
 
     // --- Trash / Restore ---
@@ -158,7 +158,7 @@ class SessionController extends Controller
 
         return redirect()
             ->route('session.trash', $program->id)
-            ->with('success', 'Sesi berjaya dikembalikan');
+            ->with('success', 'Session details restored successfully');
     }
 
     public function forceDelete(Program $program, $id)
@@ -172,7 +172,7 @@ class SessionController extends Controller
 
         return redirect()
             ->route('session.trash', $program->id)
-            ->with('success', 'Sesi berjaya dihapuskan sepenuhnya');
+            ->with('success', 'Session details deleted permanently');
     }
 
     // --- Optional: Carian ---
@@ -184,9 +184,9 @@ class SessionController extends Controller
         $query = Session::where('program_id', $program->id);
 
         if ($search) {
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('title', 'LIKE', "%{$search}%")
-                  ->orWhere('venue', 'LIKE', "%{$search}%");
+                    ->orWhere('venue', 'LIKE', "%{$search}%");
             });
         }
 
@@ -199,4 +199,3 @@ class SessionController extends Controller
         ]);
     }
 }
-

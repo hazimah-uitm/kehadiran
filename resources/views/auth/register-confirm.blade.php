@@ -8,7 +8,7 @@
                     <div class="d-flex align-items-center justify-content-center flex-column flex-md-row mb-4">
                         <img src="{{ asset('public/assets/images/putih.png') }}" class="logo-icon-login" alt="logo icon">
                         <div class="ms-3">
-                            <h4 class="logo-text-login mb-0">SISTEM KEHADIRAN</h4>
+                            <h4 class="logo-text-login mb-0">ATTENDANCE SYSTEM</h4>
                         </div>
                     </div>
                 </div>
@@ -18,12 +18,12 @@
                             <div class="card-body">
                                 <div class="border p-2 rounded">
                                     <div class="text-center mb-4">
-                                        <h3>{{ __('Pendaftaran Berjaya') }}</h3>
+                                        <h3>{{ __('Registration Successful') }}</h3>
                                     </div>
 
                                     <div class="text-center mb-3">
                                         <p class="mb-2">
-                                            {{ __('Sila semak emel anda untuk pautan pengesahan sebelum log masuk.') }}
+                                            {{ __('Please check your email for the verification link before logging in.') }}
                                         </p>
                                     </div>
                                     

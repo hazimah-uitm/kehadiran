@@ -8,7 +8,7 @@
                     <div class="d-flex align-items-center justify-content-center flex-column flex-md-row mb-4">
                         <img src="{{ asset('public/assets/images/putih.png') }}" class="logo-icon-login" alt="logo icon">
                         <div class="ms-3">
-                            <h4 class="logo-text-login mb-0">SISTEM KEHADIRAN</h4>
+                            <h4 class="logo-text-login mb-0">ATTENDANCE SYSTEM</h4>
                         </div>
                     </div>
                 </div>
@@ -18,11 +18,11 @@
                             <div class="card-body">
                                 <div class="border p-2 rounded">
                                     <div class="text-center mb-4">
-                                        <h3>{{ __('Sila Sahkan Alamat Emel Anda') }}</h3>
+                                        <h3>{{ __('Please Verify Your Email Address') }}</h3>
                                     </div>
                                     @if (session('resent'))
                                         <div class="alert alert-success text-center" role="alert">
-                                            {{ __('Pautan pengesahan baru telah dihantar ke emel anda.') }}
+                                            {{ __('A new verification link has been sent to your email.') }}
                                         </div>
                                     @endif
 
@@ -30,9 +30,9 @@
                                         <form method="GET" action="{{ route('verification.resend') }}">
                                             {{ csrf_field() }}
                                             <p class="mb-2">
-                                                {{ __('Sila periksa emel untuk pautan pengesahan. Jika tiada,') }}</p>
+                                                {{ __('Please check your email for the verification link. If you did not receive it,') }}</p>
                                             <button type="submit"
-                                                class="btn btn-primary">{{ __('Klik di sini untuk pautan baru') }}</button>
+                                                class="btn btn-primary">{{ __('Click here to request a new link.') }}</button>
                                         </form>
                                     </div>
                                 </div>

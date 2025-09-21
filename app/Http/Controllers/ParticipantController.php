@@ -26,7 +26,7 @@ class ParticipantController extends Controller
         // ringankan brute-force: extra cache-based cooldown ringan (optional)
         $key = 'check_ic_' . $request->ip();
         if (Cache::has($key)) {
-            return back()->withErrors(['ic_passport' => 'Cuba lagi sebentar lagi.'])->withInput();
+            return back()->withErrors(['ic_passport' => 'Please try again later.'])->withInput();
         }
         Cache::put($key, 1, now()->addSeconds(2));
 
@@ -35,8 +35,8 @@ class ParticipantController extends Controller
         $request->validate([
             'ic_passport' => 'required|string|max:191',
         ], [
-            'ic_passport.required' => 'Sila masukkan IC/Passport.',
-            'ic_passport.max'      => 'IC/Passport tidak boleh melebihi 191 aksara.',
+            'ic_passport.required' => 'Please enter IC/Passport No.',
+            'ic_passport.max'      => 'IC/Passport cannot exceed 191 characters.',
         ]);
 
         $participant = Participant::where('program_id', $program->id)
@@ -44,13 +44,13 @@ class ParticipantController extends Controller
             ->first();
 
         if (!$participant) {
-            return back()->withErrors(['ic_passport' => 'Rekod tidak ditemui untuk program ini.'])->withInput();
+            return back()->withErrors(['ic_passport' => 'No record found for this program.'])->withInput();
         }
 
         // Pastikan QR wujud; kalau hilang, jana semula menggunakan participant_code sedia ada
         if (!$participant->participant_code) {
-            // fallback: kalau entah macam mana tiada kod (kasus lama), kau boleh generate atau block
-            return back()->withErrors(['ic_passport' => 'Kod peserta belum tersedia. Sila hubungi urus setia.']);
+            // fallback: kalau entah macam mana tiada kod, kau boleh generate atau block
+            return back()->withErrors(['ic_passport' => 'Participant code not yet available.']);
         }
 
         if (empty($participant->qr_path) || !Storage::disk('public')->exists($participant->qr_path)) {
@@ -100,7 +100,7 @@ class ParticipantController extends Controller
         return view('pages.public.participant.form', [
             'program'    => $program,
             'save_route' => route('public.participant.store', $program->id),
-            'str_mode'   => 'Pendaftaran Peserta',
+            'str_mode'   => 'Participant Registration',
         ]);
     }
 
@@ -118,17 +118,17 @@ class ParticipantController extends Controller
             'phone_no'         => 'nullable|string|max:30',
             'institution'      => 'nullable|string|max:191',
         ], [
-            'name.required'        => 'Sila isi nama peserta',
-            'ic_passport.required' => 'Sila isi IC/Passport',
-            'ic_passport.unique'   => 'IC/Passport ini telah wujud dalam program ini',
-            'ic_passport.max'      => 'IC/Passport tidak boleh melebihi 191 aksara',
-            'phone_no.max'         => 'No. Telefon tidak boleh melebihi 30 aksara',
+            'name.required'        => 'Please enter the full name',
+            'ic_passport.required' => 'Please enter IC/Passport number',
+            'ic_passport.unique'   => 'This IC/Passport already exists in this program',
+            'ic_passport.max'      => 'IC/Passport cannot exceed 191 characters',
+            'phone_no.max'         => 'Phone number cannot exceed 30 characters',
         ]);
 
         $prefix = $this->sanitizePrefix($program->program_code ?: 'PRG');
 
         [$participant, $code] = DB::transaction(function () use ($program, $request, $prefix) {
-            $participant = \App\Models\Participant::create([
+            $participant = Participant::create([
                 'program_id'       => $program->id,
                 'name'             => $request->name,
                 'ic_passport'      => $request->ic_passport,
@@ -138,7 +138,7 @@ class ParticipantController extends Controller
                 'institution'      => $request->institution,
             ]);
 
-            $count = \App\Models\Participant::withTrashed()
+            $count = Participant::withTrashed()
                 ->where('program_id', $program->id)
                 ->whereNotNull('participant_code')
                 ->count();
@@ -164,7 +164,7 @@ class ParticipantController extends Controller
 
         return redirect()
             ->route('public.participant.show', [$program->id, $participant->id])
-            ->with('success', "Pendaftaran berjaya. Kod Peserta: {$code}");
+            ->with('success', "Registration successful. Participant Code: {$code}");
     }
 
 
@@ -184,7 +184,7 @@ class ParticipantController extends Controller
         return view('pages.participant.form', [
             'program'    => $program,
             'save_route' => route('admin.participant.store', ['program' => $program->id]),
-            'str_mode'   => 'Tambah',
+            'str_mode'   => 'Add',
         ]);
     }
 
@@ -198,11 +198,11 @@ class ParticipantController extends Controller
             'phone_no'         => 'nullable|string|max:30',
             'institution'      => 'nullable|string|max:191',
         ], [
-            'name.required'        => 'Sila isi nama peserta',
-            'ic_passport.required' => 'Sila isi IC/Passport',
-            'ic_passport.unique'   => 'IC/Passport ini telah wujud dalam program ini',
-            'ic_passport.max'      => 'IC/Passport tidak boleh melebihi 191 aksara',
-            'phone_no.max'         => 'No. Telefon tidak boleh melebihi 30 aksara',
+             'name.required'        => 'Please enter the full name',
+            'ic_passport.required' => 'Please enter IC/Passport number',
+            'ic_passport.unique'   => 'This IC/Passport already exists in this program',
+            'ic_passport.max'      => 'IC/Passport cannot exceed 191 characters',
+            'phone_no.max'         => 'Phone number cannot exceed 30 characters',
         ]);
 
         // Pastikan ada program_code; kalau tak ada, fallback ke 'PRG'
@@ -251,7 +251,7 @@ class ParticipantController extends Controller
         });
 
         return redirect()->route('admin.participant', $program->id)
-            ->with('success', "Peserta berjaya disimpan. Kod: {$code}");
+            ->with('success', "Participant details saved successfully. Participant Code: {$code}");
     }
 
     public function show(Program $program, Participant $participant)
@@ -269,7 +269,7 @@ class ParticipantController extends Controller
             'program'     => $program,
             'participant' => $participant,
             'save_route'  => route('admin.participant.update', [$program->id, $participant->id]),
-            'str_mode'    => 'Kemas Kini',
+            'str_mode'    => 'Edit',
         ]);
     }
 
@@ -285,11 +285,11 @@ class ParticipantController extends Controller
             'phone_no'         => 'nullable|string|max:30',
             'institution'      => 'nullable|string|max:191',
         ], [
-            'name.required'        => 'Sila isi nama peserta',
-            'ic_passport.required' => 'Sila isi IC/Passport',
-            'ic_passport.unique'   => 'IC/Passport ini telah wujud dalam program ini',
-            'ic_passport.max'      => 'IC/Passport tidak boleh melebihi 191 aksara',
-            'phone_no.max'         => 'No. Telefon tidak boleh melebihi 30 aksara',
+            'name.required'        => 'Please enter the full name',
+            'ic_passport.required' => 'Please enter IC/Passport number',
+            'ic_passport.unique'   => 'This IC/Passport already exists in this program',
+            'ic_passport.max'      => 'IC/Passport cannot exceed 191 characters',
+            'phone_no.max'         => 'Phone number cannot exceed 30 characters',
         ]);
 
         // Kod & QR TIDAK diubah masa edit
@@ -303,7 +303,7 @@ class ParticipantController extends Controller
         ]));
 
         return redirect()->route('admin.participant', $program->id)
-            ->with('success', 'Peserta berjaya dikemaskini');
+            ->with('success', 'Participant details updated successfully');
     }
 
     public function destroy(Program $program, Participant $participant)
@@ -313,7 +313,7 @@ class ParticipantController extends Controller
         $participant->delete();
 
         return redirect()->route('admin.participant', $program->id)
-            ->with('success', 'Peserta berjaya dihapuskan');
+            ->with('success', 'Participant details deleted successfully');
     }
 
     // --- Trash ---
@@ -339,7 +339,7 @@ class ParticipantController extends Controller
         $item->restore();
 
         return redirect()->route('admin.participant.trash', $program->id)
-            ->with('success', 'Peserta berjaya dikembalikan');
+            ->with('success', 'Participant details restored successfully');
     }
 
     public function forceDelete(Program $program, $id)
@@ -352,7 +352,7 @@ class ParticipantController extends Controller
         $item->forceDelete();
 
         return redirect()->route('admin.participant.trash', $program->id)
-            ->with('success', 'Peserta berjaya dihapuskan sepenuhnya');
+            ->with('success', 'Participant details deleted permanently');
     }
 
     // --- Carian ---

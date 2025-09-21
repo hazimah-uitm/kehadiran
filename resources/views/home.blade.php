@@ -3,10 +3,11 @@
 @section('content')
 <div class="container-fluid mb-3">
     <div class="d-flex align-items-center justify-content-between mb-3">
-        <h2 class="mb-0">Senarai Program</h2>
-
+        <h2 class="fw-500 mb-3 mb-md-0 d-flex align-items-center flex-wrap" style="font-size: 1.3rem;">
+                PROGRAM LIST
+            </h2>
         <form method="GET" action="{{ route('home') }}" class="d-flex align-items-center">
-            <label class="me-2 mb-0 small text-muted">Papar</label>
+            <label class="me-2 mb-0 small text-muted">Show</label>
             @php
             $currentPerPage = (int) request('perPage', $perPage ?? 12);
             @endphp
@@ -51,7 +52,7 @@
                         <div class="list-group-item d-flex justify-content-between align-items-start">
                             <div class="me-2">
                                 {{-- Tarikh & Masa --}}
-                                <div class="fw-semibold">
+                                <div class="small">
                                     @if (!empty($session->start_time) && !empty($session->end_time))
                                     {{ \Carbon\Carbon::parse($session->start_time)->format('d M Y, h:i A') }}
                                     –
@@ -60,7 +61,7 @@
                                 </div>
 
                                 {{-- Tajuk Sesi --}}
-                                <div><i class="bx bx-layer me-1 text-success"></i>{{ $session->title ?? 'Sesi' }}</div>
+                                <div class="small"><i class="bx bx-layer me-1 text-success"></i>{{ $session->title ?? 'Sesi' }}</div>
 
                                 {{-- Lokasi --}}
                                 @if (!empty($session->venue))
@@ -73,7 +74,7 @@
                             {{-- Butang Kehadiran --}}
                             <a href="{{ route('attendance.create.session', ['program' => $program->id, 'session' => $session->id]) }}"
                                 class="btn btn-sm btn-success" target="_blank">
-                                <i class="bx bx-list-check"></i> Kehadiran
+                                <i class="bx bx-list-check"></i> Attendance Check-in
                             </a>
                         </div>
                         @endforeach
@@ -83,7 +84,7 @@
                         <div class="col-12 col-sm">
                             <a href="{{ route('admin.participant', ['program' => $program->id]) }}"
                                 class="btn btn-primary btn-sm d-inline-flex align-items-center justify-content-center px-2 py-1 w-100">
-                                <i class="bx bx-user-plus me-1"></i>Peserta
+                                <i class="bx bx-user-plus me-1"></i>Participant
                             </a>
                         </div>
 
@@ -91,14 +92,14 @@
                         <div class="col-12 col-sm">
                             <a href="{{ route('session', ['program' => $program->id]) }}"
                                 class="btn btn-warning btn-sm d-inline-flex align-items-center justify-content-center px-2 py-1 w-100">
-                                <i class="bx bx-calendar me-1"></i>Sesi
+                                <i class="bx bx-calendar me-1"></i>Session
                             </a>
                         </div>
                         @else
                         <div class="col-12 col-sm">
                             <a href="{{ route('attendance.index.program', $program->id) }}"
                                 class="btn btn-warning btn-sm d-inline-flex align-items-center justify-content-center px-2 py-1 w-100">
-                                <i class="bx bx-grid-alt me-1"></i>Kehadiran
+                                <i class="bx bx-grid-alt me-1"></i>Attendace Check-in
                             </a>
                         </div>
                         @endif
@@ -106,7 +107,7 @@
                         <div class="col-12 col-sm">
                             <a href="{{ route('program.show', $program->id) }}"
                                 class="btn btn-info btn-sm d-inline-flex align-items-center justify-content-center px-2 py-1 w-100">
-                                <span class="text-nowrap">Butiran Program →</span>
+                                <span class="text-nowrap">Details →</span>
                             </a>
                         </div>
                     </div>
@@ -115,7 +116,7 @@
         </div>
         @empty
         <div class="col-12">
-            <div class="alert alert-light border">Tiada program ditemui.</div>
+            <div class="alert alert-light border">No program found.</div>
         </div>
         @endforelse
     </div>

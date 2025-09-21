@@ -8,7 +8,7 @@
                     <div class="d-flex align-items-center justify-content-center flex-column flex-md-row mb-4">
                         <img src="{{ asset('public/assets/images/putih.png') }}" class="logo-icon-login" alt="logo icon">
                         <div class="ms-3">
-                            <h4 class="logo-text-login mb-0">SISTEM KEHADIRAN</h4>
+                            <h4 class="logo-text-login mb-0">ATTENDANCE SYSTEM</h4>
                         </div>
                     </div>
                 </div>
@@ -20,13 +20,12 @@
                                 <div class="border p-4 rounded">
 
                                     <div class="text-center mb-3">
-                                        <h3 class="">Pengesahan Akaun</h3>
+                                        <h3 class="">Account Verification</h3>
                                         <p class="text-muted">
                                             @if (!isset($user))
-                                                Sila semak No. Pekerja anda.
+                                                Please check your Staff ID.
                                             @else
-                                                Sila lengkapkan <strong>Emel UiTM</strong> dan <strong>Kata Laluan</strong> anda untuk
-                                                menerima pautan pengesahan.
+                                                Kindly complete your <strong>UiTM Email</strong> and <strong>Password</strong> to receive the verification link.
                                             @endif
                                         </p>
                                     </div>
@@ -51,7 +50,7 @@
                                         {{ csrf_field() }}
 
                                         <div class="mb-1">
-                                            <label>No. Pekerja</label>
+                                            <label>Staff ID</label>
                                             <input type="text" name="staff_id" class="form-control"
                                                 value="{{ old('staff_id', $user->staff_id ?? '') }}" required
                                                 {{ isset($user) ? 'readonly' : '' }}>
@@ -59,7 +58,7 @@
 
                                         @if (isset($user))
                                             <div class="mb-1">
-                                                <label>Alamat Emel UiTM</label>
+                                                <label>UiTM Email Address</label>
                                                 <input type="email" name="email" class="form-control"
                                                     value="{{ old('email') }}" required>
                                             </div>
@@ -67,7 +66,7 @@
 
                                             <div class="row mb-1">
                                                 <div class="col-6">
-                                                    <label for="password" class="form-label">Kata Laluan</label>
+                                                    <label for="password" class="form-label">Password</label>
                                                     <input type="password"
                                                         class="form-control {{ $errors->has('password') ? 'is-invalid' : '' }}"
                                                         id="password" name="password" required>
@@ -81,8 +80,7 @@
                                                 </div>
 
                                                 <div class="col-6">
-                                                    <label for="password-confirm" class="form-label">Sahkan Kata
-                                                        Laluan</label>
+                                                    <label for="password-confirm" class="form-label">Confirm Password</label>
                                                     <input type="password" class="form-control" id="password-confirm"
                                                         name="password_confirmation" required>
                                                 </div>
@@ -92,7 +90,7 @@
 
                                             <div class="row mb-1">
                                                 <div class="col-6">
-                                                    <label>Nama</label>
+                                                    <label>Full Name</label>
                                                     <input type="text" class="form-control" value="{{ $user->name }}"
                                                         readonly>
                                                 </div>
@@ -104,12 +102,12 @@
                                             </div>
                                             <div class="row mb-3">
                                                 <div class="col-6">
-                                                    <label>Jawatan</label>
+                                                    <label>Position</label>
                                                     <input type="text" class="form-control"
                                                         value="{{ $user->position->title ?? '-' }}" readonly>
                                                 </div>
                                                 <div class="col-6">
-                                                    <label>Kampus</label>
+                                                    <label>Campus</label>
                                                     <input type="text" class="form-control"
                                                         value="{{ $user->campus->name ?? '-' }}" readonly>
                                                 </div>
@@ -118,11 +116,11 @@
 
                                         <div class="mt-3 d-grid">
                                             <button type="submit" class="btn btn-primary">
-                                                {{ isset($user) ? 'Hantar Pautan Pengesahan' : 'Semak' }}
+                                                {{ isset($user) ? 'Send Verification Link' : 'Check' }}
                                             </button>
                                         </div>
                                         <div class="mt-2 text-center">
-                                            <a href="{{ route('login') }}">Kembali ke Log Masuk</a>
+                                            <a href="{{ route('login') }}">Back to Log In</a>
                                     </form>
 
                                 </div>

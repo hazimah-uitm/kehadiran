@@ -3,7 +3,7 @@
         <img src="{{ asset('public/assets/images/logo-icon.png') }}" class="logo-icon" alt="logo icon">
     </div>
     <div>
-        <h4 class="logo-text">SISTEM KEHADIRAN</h4>
+        <h4 class="logo-text">ATTENDANCE SYSTEM</h4>
         {{-- <h6 class="logo-subtitle">Template System</h6> --}}
     </div>
     <div class="toggle-icon ms-auto" id="toggle-icon"><i class='bx bx-arrow-to-left'></i></div>
@@ -14,7 +14,7 @@
     <li class="{{ Request::routeIs('public.programs') ? 'mm-active' : '' }}">
         <a href="{{ route('public.programs') }}">
             <div class="parent-icon"><i class='bx bx-home-circle'></i></div>
-            <div class="menu-title">Laman Utama</div>
+            <div class="menu-title">Main Page</div>
         </a>
     </li>
     <li class="{{ Request::routeIs('home') ? 'mm-active' : '' }}">
@@ -26,23 +26,23 @@
 
 
     @role('Superadmin')
-        <li class="menu-label">Pengurusan Pengguna</li>
+        <li class="menu-label">User Management</li>
 
         <li class="{{ Request::is('user*') && !Request::is('user-role*') ? 'mm-active' : '' }}">
             <a href="{{ route('user') }}">
                 <div class="parent-icon"><i class='bx bx-user-circle'></i></div>
-                <div class="menu-title">Pengguna</div>
+                <div class="menu-title">User</div>
             </a>
         </li>
 
         <li class="{{ Request::is('user-role*') ? 'mm-active' : '' }}">
             <a href="{{ route('user-role') }}">
                 <div class="parent-icon"><i class='bx bx-shield'></i></div>
-                <div class="menu-title">Peranan Pengguna</div>
+                <div class="menu-title">User Role</div>
             </a>
         </li>
 
-        <li class="menu-label">Pengurusan Rekod</li>
+        <li class="menu-label">Record Management</li>
 
         <li class="{{ Request::is('program*') ? 'mm-active' : '' }}">
             <a href="{{ route('program') }}">
@@ -52,16 +52,16 @@
         </li>
 
 
-        <li class="menu-label">Tetapan</li>
+        <li class="menu-label">Setting</li>
 
         <li class="{{ Request::is('campus*') ? 'mm-active' : '' }}">
             <a class="has-arrow" href="#">
                 <div class="parent-icon"><i class='bx bx-location-plus'></i></div>
-                <div class="menu-title">Lokasi</div>
+                <div class="menu-title">Location</div>
             </a>
             <ul>
                 <li class="{{ Request::is('campus*') ? 'mm-active' : '' }}">
-                    <a href="{{ route('campus') }}"><i class="bx bx-right-arrow-alt"></i>Kampus</a>
+                    <a href="{{ route('campus') }}"><i class="bx bx-right-arrow-alt"></i>Campus</a>
                 </li>
             </ul>
         </li>
@@ -69,16 +69,16 @@
         <li class="{{ Request::is('position*') ? 'mm-active' : '' }}">
             <a class="has-arrow" href="#">
                 <div class="parent-icon"><i class="bx bx-cog"></i></div>
-                <div class="menu-title">Tetapan Umum</div>
+                <div class="menu-title">General Setting</div>
             </a>
             <ul>
                 <li class="{{ Request::is('position*') ? 'mm-active' : '' }}">
-                    <a href="{{ route('position') }}"><i class="bx bx-right-arrow-alt"></i>Jawatan</a>
+                    <a href="{{ route('position') }}"><i class="bx bx-right-arrow-alt"></i>Position</a>
                 </li>
             </ul>
             <ul>
                 <li class="{{ Request::is('ptj*') ? 'mm-active' : '' }}">
-                    <a href="{{ route('ptj') }}"><i class="bx bx-right-arrow-alt"></i>Bahagian/Unit</a>
+                    <a href="{{ route('ptj') }}"><i class="bx bx-right-arrow-alt"></i>PTJ</a>
                 </li>
             </ul>
         </li>
@@ -93,7 +93,7 @@
         <li class="{{ Request::routeIs('activity-log') ? 'mm-active' : '' }}">
             <a href="{{ route('activity-log') }}">
                 <div class="parent-icon"><i class='bx bx-history'></i></div>
-                <div class="menu-title">Log Aktiviti</div>
+                <div class="menu-title">Activity Log</div>
             </a>
         </li>
     @endrole
