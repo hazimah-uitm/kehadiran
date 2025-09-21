@@ -47,13 +47,13 @@
                         </table>
                     </div>
 
-                    <hr class="my-2" />
-
                     @if (!empty($program->description))
                         <p class="mb-4">{{ $program->description }}</p>
                     @endif
 
-                    <h6 class="fw-bold">Senarai Sesi</h6>
+                    <hr class="my-2" />
+
+                    <h6 class="fw-bold mt-3">Senarai Sesi</h6>
                     @if ($program->sessions->count())
                         <div class="list-group">
                             @foreach ($program->sessions as $session)
