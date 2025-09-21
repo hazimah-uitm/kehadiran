@@ -8,7 +8,7 @@
                 <ol class="breadcrumb mb-0 p-0">
                     <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="bx bx-home-alt"></i></a></li>
                     <li class="breadcrumb-item"><a href="{{ route('program') }}">Senarai Program</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('participant', ['program' => $program->id]) }}">Senarai Peserta</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('admin.participant', ['program' => $program->id]) }}">Senarai Peserta</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Rekod Dipadam</li>
                 </ol>
             </nav>
@@ -41,7 +41,7 @@
                                 <td>{{ $p->phone_no ?? '-' }}</td>
                                 <td>{{ $p->institution ?? '-' }}</td>
                                 <td>
-                                    <a href="{{ route('participant.restore', ['program' => $program->id, 'id' => $p->id]) }}"
+                                    <a href="{{ route('admin.participant.restore', ['program' => $program->id, 'id' => $p->id]) }}"
                                        class="btn btn-success btn-sm" title="Kembalikan">
                                         <i class="bx bx-undo"></i>
                                     </a>
@@ -79,7 +79,7 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                         <form method="POST"
-                              action="{{ route('participant.forceDelete', ['program' => $program->id, 'id' => $p->id]) }}"
+                              action="{{ route('admin.participant.forceDelete', ['program' => $program->id, 'id' => $p->id]) }}"
                               class="d-inline">
                             {{ method_field('DELETE') }}
                             {{ csrf_field() }}

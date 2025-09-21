@@ -8,14 +8,14 @@
                 <ol class="breadcrumb mb-0 p-0">
                     <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="bx bx-home-alt"></i></a></li>
                     <li class="breadcrumb-item"><a href="{{ route('program') }}">Senarai Program</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('participant', ['program' => $program->id]) }}">Senarai
+                    <li class="breadcrumb-item"><a href="{{ route('admin.participant', ['program' => $program->id]) }}">Senarai
                             Peserta</a></li>
                     <li class="breadcrumb-item active" aria-current="page">{{ $participant->name }}</li>
                 </ol>
             </nav>
         </div>
         <div class="ms-auto">
-            <a href="{{ route('participant.edit', ['program' => $program->id, 'participant' => $participant->id]) }}">
+            <a href="{{ route('admin.participant.edit', ['program' => $program->id, 'participant' => $participant->id]) }}">
                 <button type="button" class="btn btn-primary mt-2 mt-lg-0">Kemaskini Maklumat</button>
             </a>
         </div>

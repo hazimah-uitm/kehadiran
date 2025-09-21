@@ -15,7 +15,7 @@
             </nav>
         </div>
         <div class="ms-auto">
-            <a href="{{ route('participant.trash', ['program' => $program->id]) }}">
+            <a href="{{ route('admin.participant.trash', ['program' => $program->id]) }}">
                 <button type="button" class="btn btn-primary mt-2 mt-lg-0">Senarai Rekod Dipadam</button>
             </a>
         </div>
@@ -29,7 +29,7 @@
         <div class="card-body">
             <div class="d-lg-flex align-items-center mb-4 gap-3">
                 <div class="position-relative">
-                    <form action="{{ route('participant.search', ['program' => $program->id]) }}" method="GET"
+                    <form action="{{ route('admin.participant.search', ['program' => $program->id]) }}" method="GET"
                         id="searchForm" class="d-lg-flex align-items-center gap-3">
                         <div class="input-group">
                             <input type="text" class="form-control rounded"
@@ -49,7 +49,7 @@
 
                 @hasanyrole('Superadmin|Admin')
                     <div class="ms-auto">
-                        <a href="{{ route('participant.create', ['program' => $program->id]) }}"
+                        <a href="{{ route('admin.participant.create', ['program' => $program->id]) }}"
                             class="btn btn-primary radius-30 mt-2 mt-lg-0">
                             <i class="bx bxs-plus-square"></i> Tambah Peserta
                         </a>
@@ -106,14 +106,14 @@
                                     <td>{{ $p->institution ?? '-' }}</td>
                                     <td>
                                         @hasanyrole('Superadmin|Admin')
-                                            <a href="{{ route('participant.edit', ['program' => $program->id, 'participant' => $p->id]) }}"
+                                            <a href="{{ route('admin.participant.edit', ['program' => $program->id, 'participant' => $p->id]) }}"
                                                 class="btn btn-info btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom"
                                                 title="Kemaskini">
                                                 <i class="bx bxs-edit"></i>
                                             </a>
                                         @endhasanyrole
 
-                                        <a href="{{ route('participant.show', ['program' => $program->id, 'participant' => $p->id]) }}"
+                                        <a href="{{ route('admin.participant.show', ['program' => $program->id, 'participant' => $p->id]) }}"
                                             class="btn btn-primary btn-sm" data-bs-toggle="tooltip"
                                             data-bs-placement="bottom" title="Papar">
                                             <i class="bx bx-show"></i>
@@ -143,7 +143,7 @@
             <div class="mt-3 d-flex justify-content-between">
                 <div class="d-flex align-items-center">
                     <span class="mr-2 mx-1">Jumlah rekod per halaman</span>
-                    <form action="{{ route('participant.search', ['program' => $program->id]) }}" method="GET"
+                    <form action="{{ route('admin.participant.search', ['program' => $program->id]) }}" method="GET"
                         id="perPageForm" class="d-flex align-items-center">
                         <input type="hidden" name="search" value="{{ request('search') }}">
                         <select name="perPage" id="perPage" class="form-select form-select-sm"
@@ -190,7 +190,7 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                         <form class="d-inline" method="POST"
-                            action="{{ route('participant.destroy', ['program' => $program->id, 'participant' => $p->id]) }}">
+                            action="{{ route('admin.participant.destroy', ['program' => $program->id, 'participant' => $p->id]) }}">
                             {{ method_field('delete') }}
                             {{ csrf_field() }}
                             <button type="submit" class="btn btn-danger">Padam</button>
@@ -211,7 +211,7 @@
                 });
             }
             document.getElementById('resetButton').addEventListener('click', function() {
-                window.location.href = "{{ route('participant', ['program' => $program->id]) }}";
+                window.location.href = "{{ route('admin.participant', ['program' => $program->id]) }}";
             });
         });
     </script>

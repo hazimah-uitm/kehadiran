@@ -99,7 +99,7 @@ class ParticipantController extends Controller
 
         return view('pages.public.participant.form', [
             'program'    => $program,
-            'save_route' => route('participant.public.store', $program->id),
+            'save_route' => route('public.participant.store', $program->id),
             'str_mode'   => 'Pendaftaran Peserta',
         ]);
     }
@@ -183,7 +183,7 @@ class ParticipantController extends Controller
     {
         return view('pages.participant.form', [
             'program'    => $program,
-            'save_route' => route('participant.store', ['program' => $program->id]),
+            'save_route' => route('admin.participant.store', ['program' => $program->id]),
             'str_mode'   => 'Tambah',
         ]);
     }
@@ -250,7 +250,7 @@ class ParticipantController extends Controller
             return [$participant, $code];
         });
 
-        return redirect()->route('participant', $program->id)
+        return redirect()->route('admin.participant', $program->id)
             ->with('success', "Peserta berjaya disimpan. Kod: {$code}");
     }
 
@@ -268,7 +268,7 @@ class ParticipantController extends Controller
         return view('pages.participant.form', [
             'program'     => $program,
             'participant' => $participant,
-            'save_route'  => route('participant.update', [$program->id, $participant->id]),
+            'save_route'  => route('admin.participant.update', [$program->id, $participant->id]),
             'str_mode'    => 'Kemas Kini',
         ]);
     }
@@ -302,7 +302,7 @@ class ParticipantController extends Controller
             'institution'
         ]));
 
-        return redirect()->route('participant', $program->id)
+        return redirect()->route('admin.participant', $program->id)
             ->with('success', 'Peserta berjaya dikemaskini');
     }
 
@@ -312,7 +312,7 @@ class ParticipantController extends Controller
 
         $participant->delete();
 
-        return redirect()->route('participant', $program->id)
+        return redirect()->route('admin.participant', $program->id)
             ->with('success', 'Peserta berjaya dihapuskan');
     }
 
@@ -338,7 +338,7 @@ class ParticipantController extends Controller
 
         $item->restore();
 
-        return redirect()->route('participant.trash', $program->id)
+        return redirect()->route('admin.participant.trash', $program->id)
             ->with('success', 'Peserta berjaya dikembalikan');
     }
 
@@ -351,7 +351,7 @@ class ParticipantController extends Controller
 
         $item->forceDelete();
 
-        return redirect()->route('participant.trash', $program->id)
+        return redirect()->route('admin.participant.trash', $program->id)
             ->with('success', 'Peserta berjaya dihapuskan sepenuhnya');
     }
 

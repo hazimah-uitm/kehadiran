@@ -39,11 +39,11 @@ Route::get('/', 'ProgramController@publicIndex')->name('public.programs');
 Route::get('/program/{id}', 'ProgramController@publicShow')->name('public.program.show');
 
 // Pendaftaran Peserta (public) ikut PROGRAM
-Route::get('/program/{programId}/register', 'ParticipantController@createPublic')->name('participant.public.create');
-Route::post('/program/{programId}/register', 'ParticipantController@storePublic')->name('participant.public.store');
+Route::get('/program/{programId}/register', 'ParticipantController@createPublic')->name('public.participant.create');
+Route::post('/program/{programId}/register', 'ParticipantController@storePublic')->name('public.participant.store');
 Route::get('/program/{programId}/participant/{participantId}', 'ParticipantController@showPublic')
     ->name('public.participant.show');
-    
+
 // Attendance by program
 Route::get('program/{program}/attendance/create', 'AttendanceController@createProgram')->name('attendance.create.program');
 Route::post('program/{program}/attendance', 'AttendanceController@storeProgram')->name('attendance.store.program');
@@ -59,7 +59,7 @@ Route::get('/program/{programId}/semak', 'ParticipantController@checkForm')
 Route::post('/program/{programId}/semak', 'ParticipantController@checkSubmit')
     ->name('public.participant.check.submit')
     ->middleware('throttle:20,1');
-    
+
 // Password Reset Routes
 Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
 Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
@@ -173,22 +173,23 @@ Route::middleware('auth')->group(function () {
     Route::delete('program/{program}/session/{session}', 'SessionController@destroy')->name('session.destroy');
 
     // PARTICIPANTS
-    Route::prefix('program/{program}')->group(function () {
-        Route::get('participant', 'ParticipantController@index')->name('participant');
-        Route::get('participant/search', 'ParticipantController@search')->name('participant.search');
+    Route::prefix('admin/program/{program}')
+        ->name('admin.')->group(function () {
+            Route::get('participant', 'ParticipantController@index')->name('participant');
+            Route::get('participant/search', 'ParticipantController@search')->name('participant.search');
 
-        Route::get('participant/trash', 'ParticipantController@trashList')->name('participant.trash');
-        Route::get('participant/{id}/restore', 'ParticipantController@restore')->name('participant.restore');
-        Route::delete('participant/{id}/force-delete', 'ParticipantController@forceDelete')->name('participant.forceDelete');
+            Route::get('participant/trash', 'ParticipantController@trashList')->name('participant.trash');
+            Route::get('participant/{id}/restore', 'ParticipantController@restore')->name('participant.restore');
+            Route::delete('participant/{id}/force-delete', 'ParticipantController@forceDelete')->name('participant.forceDelete');
 
-        Route::get('participant/create', 'ParticipantController@create')->name('participant.create');
-        Route::post('participant', 'ParticipantController@store')->name('participant.store');
+            Route::get('participant/create', 'ParticipantController@create')->name('participant.create');
+            Route::post('participant', 'ParticipantController@store')->name('participant.store');
 
-        Route::get('participant/{participant}', 'ParticipantController@show')->name('participant.show')->where('participant', '[0-9]+');
-        Route::get('participant/{participant}/edit', 'ParticipantController@edit')->name('participant.edit')->where('participant', '[0-9]+');
-        Route::put('participant/{participant}', 'ParticipantController@update')->name('participant.update')->where('participant', '[0-9]+');
-        Route::delete('participant/{participant}', 'ParticipantController@destroy')->name('participant.destroy')->where('participant', '[0-9]+');
-    });
+            Route::get('participant/{participant}', 'ParticipantController@show')->name('participant.show')->where('participant', '[0-9]+');
+            Route::get('participant/{participant}/edit', 'ParticipantController@edit')->name('participant.edit')->where('participant', '[0-9]+');
+            Route::put('participant/{participant}', 'ParticipantController@update')->name('participant.update')->where('participant', '[0-9]+');
+            Route::delete('participant/{participant}', 'ParticipantController@destroy')->name('participant.destroy')->where('participant', '[0-9]+');
+        });
 
     // Attendance
     Route::get('program/{program}/attendance', 'AttendanceController@indexProgram')->name('attendance.index.program');

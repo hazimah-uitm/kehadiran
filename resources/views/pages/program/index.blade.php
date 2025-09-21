@@ -105,7 +105,7 @@
                                             <i class="bx bx-calendar"></i> Sesi
                                         </a>
 
-                                        <a href="{{ route('participant', ['program' => $program->id]) }}"
+                                        <a href="{{ route('admin.participant', ['program' => $program->id]) }}"
                                             class="btn btn-warning btn-sm">
                                             <i class="bx bx-user"></i> Peserta
                                         </a>
