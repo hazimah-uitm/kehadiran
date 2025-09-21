@@ -6,7 +6,7 @@
             <div class="mt-auto d-flex justify-content-between align-items-center mb-3">
                 <a href="{{ route('public.programs') }}" class="btn btn-info btn-sm">← Kembali</a>
 
-                <a href="{{ route('participant.public.create', $program->id) }}" class="btn btn-primary btn-sm">
+                <a href="{{ route('participant.public.create', $program->id) }}" class="btn btn-primary btn-sm"><i class="bx bx-user-plus"></i>
                     Pendaftaran
                 </a>
             </div>

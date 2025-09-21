@@ -42,21 +42,27 @@
                                     </p>
                                 @endif
 
-                                <div class="mt-auto d-flex justify-content-between align-items-center">
-                                    <div class="btn-group">
+                                <div class="mt-auto row g-2">
+                                    <div class="col-12 col-sm">
                                         <a href="{{ route('participant.public.create', $program->id) }}"
-                                            class="btn btn-primary btn-sm"><i class="bx bx-user-plus"></i>
-                                            Pendaftaran
-                                        </a>
-                                        <a href="{{ route('public.participant.check', $program->id) }}"
-                                            class="btn btn-warning btn-sm"><i class="bx bx-grid-alt"></i>
-                                            Jana Kod QR
+                                            class="btn btn-primary btn-sm d-inline-flex align-items-center justify-content-center px-2 py-1 w-100">
+                                            <i class="bx bx-user-plus me-1"></i>Pendaftaran
                                         </a>
                                     </div>
 
-                                    <a href="{{ route('public.program.show', $program->id) }}" class="btn btn-info btn-sm">
-                                        Butiran Program →
-                                    </a>
+                                    <div class="col-12 col-sm">
+                                        <a href="{{ route('public.participant.check', $program->id) }}"
+                                            class="btn btn-warning btn-sm d-inline-flex align-items-center justify-content-center px-2 py-1 w-100">
+                                            <i class="bx bx-grid-alt me-1"></i>Jana Kod QR
+                                        </a>
+                                    </div>
+
+                                    <div class="col-12 col-sm">
+                                        <a href="{{ route('public.program.show', $program->id) }}"
+                                            class="btn btn-info btn-sm d-inline-flex align-items-center justify-content-center px-2 py-1 w-100">
+                                            <span class="text-nowrap">Butiran Program →</span>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
