@@ -25,12 +25,12 @@
                 <h5 class="mb-1">{{ $program->title }}</h5>
 
                 {{-- Tarikh & lokasi --}}
-                <div class="text-muted mb-2">
+                <div class="small text-muted mb-2">
                     <i class="bx bx-calendar text-info me-1"></i>
                     {{ \Carbon\Carbon::parse($program->start_date)->format('d/m/Y') }}
                     – {{ \Carbon\Carbon::parse($program->end_date)->format('d/m/Y') }}
 
-                    <span class="fw-semibold mx-2">•</span>
+                    <span class="fw-semibold mx-2"></span>
 
                     <i class="bx bx-map text-warning me-1"></i>
                     {{ $program->venue ?? '-' }}
@@ -71,6 +71,13 @@
                                 </td>
                             </tr>
                         </table>
+                        <div class="alert alert-info d-flex align-items-start align-items-center gap-2 p-2 small mt-3 mb-3"
+                            role="alert">
+                            <i class="bx bx-info-circle fs-6 mt-1"></i>
+                            <div>
+                                Please <strong>save your particpant code and download your QR Code</strong>, as it will be required to check in for attendance during the program.
+                            </div>
+                        </div>
                     </div>
 
                     <div class="col-lg-5">

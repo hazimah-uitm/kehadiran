@@ -117,8 +117,7 @@
                             </div>
 
                             <div class="col-12 col-sm">
-                                <a href="{{ route('public.program.show', $program->id) }}"
-                                    class="btn btn-info btn-sm d-inline-flex align-items-center justify-content-center px-2 py-1 w-100">
+                                <a href="{{ route('public.program.show', ['program' => $program->id]) }}" class="btn btn-info btn-sm d-inline-flex align-items-center justify-content-center px-2 py-1 w-100">
                                     <span class="text-nowrap">Details →</span>
                                 </a>
                             </div>

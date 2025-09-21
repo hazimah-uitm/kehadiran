@@ -28,7 +28,10 @@ Route::get('/verify-email/{token}', 'UserController@verifyEmail')->name('verify.
 
 // Senarai program + butiran
 Route::get('/', 'ProgramController@publicIndex')->name('public.programs');
-Route::get('/program/{id}', 'ProgramController@publicShow')->name('public.program.show');
+
+Route::get('/program/{program}', 'ProgramController@publicShow')
+    ->where('program', '[0-9]+')
+    ->name('public.program.show');
 
 // Pendaftaran Peserta (public) ikut PROGRAM
 Route::get('/program/{programId}/register', 'ParticipantController@createPublic')->name('public.participant.create');
@@ -142,14 +145,17 @@ Route::middleware('auth')->group(function () {
     Route::delete('/ptj/{id}/force-delete', 'PtjController@forceDelete')->name('ptj.forceDelete');
 
     //Program
+    Route::get('program', 'ProgramController@index')->name('program');
     Route::get('program/create', 'ProgramController@create')->name('program.create');
     Route::post('program/store', 'ProgramController@store')->name('program.store');
-    Route::get('program/{id}/edit', 'ProgramController@edit')->name('program.edit');
-    Route::post('program/{id}', 'ProgramController@update')->name('program.update');
-    Route::delete('program/{id}', 'ProgramController@destroy')->name('program.destroy');
-    Route::get('/program/trash', 'ProgramController@trashList')->name('program.trash');
-    Route::get('/program/{id}/restore', 'ProgramController@restore')->name('program.restore');
-    Route::delete('/program/{id}/force-delete', 'ProgramController@forceDelete')->name('program.forceDelete');
+    Route::get('program/trash', 'ProgramController@trashList')->name('program.trash');
+    Route::get('program/{id}', 'ProgramController@show')->name('program.show')->where('id', '[0-9]+');
+    Route::get('program/{id}/edit', 'ProgramController@edit')->name('program.edit')->where('id', '[0-9]+');
+    Route::post('program/{id}', 'ProgramController@update')->name('program.update')->where('id', '[0-9]+');
+    Route::delete('program/{id}', 'ProgramController@destroy')->name('program.destroy')->where('id', '[0-9]+');
+    Route::get('program/{id}/restore', 'ProgramController@restore')->name('program.restore')->where('id', '[0-9]+');
+    Route::delete('program/{id}/force-delete', 'ProgramController@forceDelete')->name('program.forceDelete')->where('id', '[0-9]+');
+
 
     //Session
     Route::get('program/{program}/session', 'SessionController@index')->name('session');

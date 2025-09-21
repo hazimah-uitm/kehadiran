@@ -71,10 +71,13 @@ class ParticipantController extends Controller
             Storage::disk('public')->makeDirectory($dir);
         }
 
-        $png = \SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')
-            ->size(300)->margin(1)->generate($participant->participant_code);
+        // Pastikan ada participant_code sedia ada
+        $code = $participant->participant_code;
+        if (!$code) {
+            throw new \RuntimeException('Participant code not available for regeneration.');
+        }
 
-        Storage::disk('public')->put($file, $png);
+        $this->makeQrWithCaption($code, $participant->name, $file);
 
         $participant->update(['qr_path' => $file]);
     }
@@ -151,8 +154,9 @@ class ParticipantController extends Controller
             if (!Storage::disk('public')->exists($dir)) {
                 Storage::disk('public')->makeDirectory($dir);
             }
-            $png = FacadesQrCode::format('png')->size(300)->margin(1)->generate($code);
-            Storage::disk('public')->put($file, $png);
+
+            // JANA QR + KAPSYEN (nama & kod) — ganti versi lama
+            $this->makeQrWithCaption($code, $participant->name, $file);
 
             $participant->update([
                 'participant_code' => $code,
@@ -198,7 +202,7 @@ class ParticipantController extends Controller
             'phone_no'         => 'nullable|string|max:30',
             'institution'      => 'nullable|string|max:191',
         ], [
-             'name.required'        => 'Please enter the full name',
+            'name.required'        => 'Please enter the full name',
             'ic_passport.required' => 'Please enter IC/Passport number',
             'ic_passport.unique'   => 'This IC/Passport already exists in this program',
             'ic_passport.max'      => 'IC/Passport cannot exceed 191 characters',
@@ -238,14 +242,15 @@ class ParticipantController extends Controller
             if (!Storage::disk('public')->exists($dir)) {
                 Storage::disk('public')->makeDirectory($dir);
             }
-            $png = FacadesQrCode::format('png')->size(300)->margin(1)->generate($code);
-            Storage::disk('public')->put($file, $png);
 
-            // 4) Update participant dgn code & QR path
+            // JANA QR + KAPSYEN (nama & kod) — ganti versi lama
+            $this->makeQrWithCaption($code, $participant->name, $file);
+
             $participant->update([
                 'participant_code' => $code,
                 'qr_path'          => $file,
             ]);
+
 
             return [$participant, $code];
         });
@@ -277,30 +282,33 @@ class ParticipantController extends Controller
     {
         if ($participant->program_id !== $program->id) abort(404);
 
-        $request->validate([
+        $validated = $request->validate([
             'name'             => 'required|string|max:191',
             'ic_passport'      => 'required|string|max:191|unique:participants,ic_passport,' . $participant->id . ',id,program_id,' . $program->id,
             'student_staff_id' => 'nullable|string|max:191',
             'nationality'      => 'nullable|string|max:191',
             'phone_no'         => 'nullable|string|max:30',
             'institution'      => 'nullable|string|max:191',
-        ], [
-            'name.required'        => 'Please enter the full name',
-            'ic_passport.required' => 'Please enter IC/Passport number',
-            'ic_passport.unique'   => 'This IC/Passport already exists in this program',
-            'ic_passport.max'      => 'IC/Passport cannot exceed 191 characters',
-            'phone_no.max'         => 'Phone number cannot exceed 30 characters',
         ]);
 
-        // Kod & QR TIDAK diubah masa edit
-        $participant->update($request->only([
-            'name',
-            'ic_passport',
-            'student_staff_id',
-            'nationality',
-            'phone_no',
-            'institution'
-        ]));
+        // Simpan nama lama untuk banding
+        $oldName = $participant->name;
+
+        $participant->update($validated);
+
+        // Kalau nama berubah, regenerate QR baru
+        if ($oldName !== $participant->name && $participant->participant_code) {
+            $dir  = "qrcodes/{$program->id}";
+            $file = "{$dir}/participant_{$participant->id}.png";
+
+            if (!Storage::disk('public')->exists($dir)) {
+                Storage::disk('public')->makeDirectory($dir);
+            }
+
+            $this->makeQrWithCaption($participant->participant_code, $participant->name, $file);
+
+            $participant->update(['qr_path' => $file]);
+        }
 
         return redirect()->route('admin.participant', $program->id)
             ->with('success', 'Participant details updated successfully');
@@ -384,5 +392,110 @@ class ParticipantController extends Controller
         // buang bukan alnum, upper-case, trim
         $prefix = preg_replace('/[^A-Za-z0-9]/', '', (string) $prefix);
         return strtoupper(substr($prefix ?: 'PRG', 0, 20));
+    }
+
+    private function makeQrWithCaption(string $code, string $name, string $destPath, int $size = 300): void
+    {
+        // 1) Generate QR PNG (bytes) — encode kod sahaja
+        $qrPng = \SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')
+            ->size($size)->margin(1)->generate($code);
+
+        // 2) Buat resource imej GD daripada QR
+        $qr = imagecreatefromstring($qrPng);
+        if ($qr === false) {
+            throw new \RuntimeException('Failed to create image from QR data.');
+        }
+
+        $qrW = imagesx($qr);
+        $qrH = imagesy($qr);
+
+        // 3) Tetapan kanvas & teks
+        $paddingX = 20;     // kiri/kanan
+        $paddingTop = 20;   // atas QR
+        $gap = 10;          // jarak antara QR dan teks
+        $lineGap = 6;
+
+        // Kita sediakan dua baris: Nama & Kod
+        // Elak terlalu panjang: potong nama (optional)
+        $name = trim($name);
+        if (mb_strlen($name, 'UTF-8') > 60) {
+            $name = mb_substr($name, 0, 57, 'UTF-8') . '...';
+        }
+        $lines = [$name, $code];
+
+        // Cuba guna TTF (lebih cantik & sokong UTF-8).
+        $fontPath = resource_path('fonts/DejaVuSans.ttf'); // letak fail font ni
+        $useTtf = file_exists($fontPath);
+
+        // Anggar tinggi teks
+        if ($useTtf) {
+            $fontSize = 12; // px-ish
+            // Kira tinggi total teks (lebih kurang)
+            $lineHeights = [];
+            $maxTextWidth = 0;
+            foreach ($lines as $text) {
+                // bbox = [llx,lly,lrx,lry,urx,ury,ulx,uly]
+                $bbox = imagettfbbox($fontSize, 0, $fontPath, $text);
+                $textWidth = $bbox[2] - $bbox[0];
+                $textHeight = ($bbox[1] - $bbox[7]); // tinggi positif
+                $lineHeights[] = $textHeight;
+                $maxTextWidth = max($maxTextWidth, $textWidth);
+            }
+            $textBlockHeight = array_sum($lineHeights) + $lineGap * (count($lines) - 1);
+            $canvasW = max($qrW + 2 * $paddingX, $maxTextWidth + 2 * $paddingX);
+        } else {
+            // Fallback tanpa TTF (bitmap font 5)
+            $font = 5;
+            $lineHeights = array_fill(0, count($lines), imagefontheight($font));
+            $textWidths = array_map(function ($t) use ($font) {
+                return imagefontwidth($font) * strlen($t);
+            }, $lines);
+            $textBlockHeight = array_sum($lineHeights) + $lineGap * (count($lines) - 1);
+            $maxTextWidth = max($textWidths);
+            $canvasW = max($qrW + 2 * $paddingX, $maxTextWidth + 2 * $paddingX);
+        }
+
+        $canvasH = $paddingTop + $qrH + $gap + $textBlockHeight + $paddingTop;
+
+        // 4) Cipta kanvas putih, salin QR dan tulis teks
+        $im = imagecreatetruecolor($canvasW, $canvasH);
+        $white = imagecolorallocate($im, 255, 255, 255);
+        $black = imagecolorallocate($im, 0, 0, 0);
+        imagefilledrectangle($im, 0, 0, $canvasW, $canvasH, $white);
+
+        // Letak QR center
+        $qrX = (int)(($canvasW - $qrW) / 2);
+        imagecopy($im, $qr, $qrX, $paddingTop, 0, 0, $qrW, $qrH);
+        imagedestroy($qr);
+
+        // Tulis teks (center)
+        $textY = $paddingTop + $qrH + $gap;
+        foreach ($lines as $idx => $text) {
+            if ($useTtf) {
+                $bbox = imagettfbbox($fontSize, 0, $fontPath, $text);
+                $textWidth = $bbox[2] - $bbox[0];
+                $textHeight = ($bbox[1] - $bbox[7]);
+                $x = (int)(($canvasW - $textWidth) / 2);
+                $y = (int)($textY + $textHeight); // baseline
+                imagettftext($im, $fontSize, 0, $x, $y, $black, $fontPath, $text);
+                $textY += $textHeight + $lineGap;
+            } else {
+                $font = 5;
+                $textWidth = imagefontwidth($font) * strlen($text);
+                $textHeight = imagefontheight($font);
+                $x = (int)(($canvasW - $textWidth) / 2);
+                $y = (int)$textY;
+                imagestring($im, $font, $x, $y, $text, $black);
+                $textY += $textHeight + $lineGap;
+            }
+        }
+
+        // 5) Simpan ke Storage (public)
+        ob_start();
+        imagepng($im);
+        $pngOut = ob_get_clean();
+        imagedestroy($im);
+
+        Storage::disk('public')->put($destPath, $pngOut);
     }
 }

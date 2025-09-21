@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="wrapper-main">
-    <div class="container py-4" style="max-width:720px;">
+    <div class="container py-4" style="max-width:860px;">
 
         {{-- Back button (public listing) --}}
         <a href="{{ route('public.programs') }}" class="btn btn-info btn-sm mb-3">← Back</a>
