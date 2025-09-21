@@ -3,38 +3,82 @@
 @section('content')
     <div class="wrapper-main">
         <div class="container py-4" style="max-width:720px;">
+
+            {{-- Back button (public listing) --}}
             <a href="{{ route('public.programs') }}" class="btn btn-info btn-sm mb-3">← Kembali</a>
 
             <div class="card shadow-sm border-0">
+                <div class="card-header text-center text-white h6 text-uppercase d-flex justify-content-center align-items-center gap-2"
+                    style="background-color:#03244c;">
+                    <i class='bx bx-user-check fs-5'></i>
+                    KEHADIRAN PESERTA
+                </div>
                 <div class="card-body">
-                    {{-- Konteks supaya pengguna yakin --}}
-                    <h4 class="mb-0">{{ $session->program->title }}</h4>
-                    <div class="small text-muted mb-2">Kod: {{ $session->program->program_code }}</div>
 
-                    {{-- Mesej berjaya (kalau ada) --}}
+                    {{-- Konteks supaya pengguna yakin --}}
+                    <h5 class="mb-0">{{ $program->title }}</h5>
+
+                    <div class="table-responsive small mt-2">
+                        <table class="table table-sm table-borderless align-middle mb-0">
+                            <tbody>
+                                <tr>
+                                    <th class="fw-normal text-secondary" style="width:90px;">
+                                        <i class="bx bx-hash me-1 text-primary"></i> Kod
+                                    </th>
+                                    <td>{{ $program->program_code }}</td>
+                                </tr>
+                                @if ($session)
+                                    <tr>
+                                        <th class="fw-normal text-secondary">
+                                            <i class="bx bx-layer me-1 text-success"></i> Sesi
+                                        </th>
+                                        <td class="text-break">{{ $session->title }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="fw-normal text-secondary">
+                                            <i class="bx bx-calendar me-1 text-info"></i> Tarikh
+                                        </th>
+                                        <td>
+                                            {{ \Carbon\Carbon::parse($session->start_time)->format('d/m/Y H:i') }}
+                                            – {{ \Carbon\Carbon::parse($session->end_time)->format('d/m/Y H:i') }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="fw-normal text-secondary">
+                                            <i class="bx bx-map me-1 text-warning"></i> Lokasi
+                                        </th>
+                                        <td class="text-break">{{ $session->venue }}</td>
+                                    </tr>
+                                @endif
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <hr class="my-2" />
+
+                    {{-- Mesej berjaya / gagal --}}
                     @if (session('success'))
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                             {{ session('success') }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     @endif
                     @if (session('error'))
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
                             {{ session('error') }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('attendance.public.store', $session->id) }}" id="attendanceForm"
-                        autocomplete="off">
+                    {{-- Borang kehadiran (by program / by sesi) --}}
+                    <form method="POST" action="{{ $postRoute }}" id="attendanceForm" autocomplete="off">
                         {{ csrf_field() }}
 
                         <div class="mb-3">
                             <label for="participant_code" class="form-label">Kod Peserta</label>
                             <input type="text" id="participant_code" name="participant_code"
                                 class="form-control {{ $errors->has('participant_code') ? 'is-invalid' : '' }}"
-                                value="{{ old('participant_code') }}" placeholder="Imbas kod atau taip kod peserta"
-                                autofocus>
+                                value="{{ old('participant_code') }}" placeholder="Imbas atau taip kod peserta" autofocus>
                             @if ($errors->has('participant_code'))
                                 <div class="invalid-feedback">
                                     @foreach ($errors->get('participant_code') as $error)
@@ -44,14 +88,16 @@
                             @endif
                         </div>
 
-                        <button type="submit" class="btn btn-primary">Hantar</button>
-                        <button type="button" class="btn btn-outline-secondary ms-1" id="clearBtn">Reset</button>
+                        <div class="mt-3 d-flex justify-content-between">
+                            <button type="button" id="clearBtn" class="btn btn-outline-secondary">Reset</button>
+                            <button type="submit" class="btn btn-primary">Hantar</button>
+                        </div>
                     </form>
 
-                    <div class="mt-3 small text-muted">
-                        Tip: Letak kursor dalam kotak di atas, imbas, dan pastikan scanner hantar kekunci “Enter” atau biar
-                        sistem auto-submit.
-                    </div>
+                    {{-- <div class="mt-3 small text-muted">
+                        Tip: Letak kursor dalam kotak di atas, imbas, dan pastikan scanner hantar kekunci “Enter” untuk
+                        auto-submit.
+                    </div> --}}
                 </div>
             </div>
         </div>
@@ -62,29 +108,45 @@
             const form = document.getElementById('attendanceForm');
             const input = document.getElementById('participant_code');
             const clearBtn = document.getElementById('clearBtn');
+            const MIN_LEN = 3;
 
             // Submit bila tekan Enter
             input && input.addEventListener('keydown', function(e) {
                 if (e.key === 'Enter') {
                     e.preventDefault();
                     const val = (input.value || '').trim();
-                    if (val.length >= 3) form.submit();
+                    if (val.length >= MIN_LEN) form.submit();
                 }
             });
 
-            // Reset button
+            // Reset
             clearBtn && clearBtn.addEventListener('click', function() {
-                input.value = '';
-                input.focus();
+                if (input) {
+                    input.value = '';
+                    input.classList.remove('is-invalid');
+                    // buang mesej error kalau ada
+                    const feedback = input.closest('.mb-3')?.querySelector('.invalid-feedback');
+                    if (feedback) feedback.remove();
+                    input.focus();
+                }
             });
 
-            // Fokus semula lepas reload
+            // Fokus semula lepas reload; kosongkan input jika success
             window.addEventListener('pageshow', function() {
                 if (input) input.focus();
                 @if (session('success'))
                     if (input) input.value = '';
                 @endif
             });
+
+            // Auto-dismiss alert selepas 3s
+            setTimeout(function() {
+                const alerts = document.querySelectorAll('.alert');
+                alerts.forEach(alert => {
+                    const bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                });
+            }, 3000);
         })();
     </script>
 

@@ -38,18 +38,19 @@ Route::get('/verify-email/{token}', 'UserController@verifyEmail')->name('verify.
 Route::get('/', 'ProgramController@publicIndex')->name('public.programs');
 Route::get('/program/{id}', 'ProgramController@publicShow')->name('public.program.show');
 
-// Pendaftaran (public) ikut PROGRAM
+// Pendaftaran Peserta (public) ikut PROGRAM
 Route::get('/program/{programId}/register', 'ParticipantController@createPublic')->name('participant.public.create');
 Route::post('/program/{programId}/register', 'ParticipantController@storePublic')->name('participant.public.store');
-
-// PUBLIC: paparan/aksi kehadiran (contoh; sesuaikan dgn flow awak)
-Route::get('/attendance/{session}', 'AttendanceController@public')->name('attendance.public');
 Route::get('/program/{programId}/participant/{participantId}', 'ParticipantController@showPublic')
     ->name('public.participant.show');
+    
+// Attendance by program
+Route::get('program/{program}/attendance/create', 'AttendanceController@createProgram')->name('attendance.create.program');
+Route::post('program/{program}/attendance', 'AttendanceController@storeProgram')->name('attendance.store.program');
 
-// PUBLIC Attendance (Check-in)
-Route::get('/attendance/{session}', 'AttendanceController@public')->name('attendance.public');
-Route::post('/attendance/{session}/checkin', 'AttendanceController@storePublic')->name('attendance.public.store');
+// Attendance by session
+Route::get('program/{program}/session/{session}/attendance/create', 'AttendanceController@createSession')->name('attendance.create.session');
+Route::post('program/{program}/session/{session}/attendance', 'AttendanceController@storeSession')->name('attendance.store.session');
 
 // Password Reset Routes
 Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
@@ -184,22 +185,8 @@ Route::middleware('auth')->group(function () {
     // Attendance
     Route::get('program/{program}/attendance', 'AttendanceController@indexProgram')->name('attendance.index.program');
     Route::get('program/{program}/session/{session}/attendance', 'AttendanceController@indexSession')->name('attendance.index.session');
-
-    // Search
     Route::get('program/{program}/attendance/search', 'AttendanceController@searchProgram')->name('attendance.search.program');
     Route::get('program/{program}/session/{session}/attendance/search', 'AttendanceController@searchSession')->name('attendance.search.session');
-
-    // Create (papar borang urusetia)
-    Route::get('program/{program}/attendance/create', 'AttendanceController@createProgram')->name('attendance.create.program');
-    Route::get('program/{program}/session/{session}/attendance/create', 'AttendanceController@createSession')->name('attendance.create.session');
-
-    // Attendance by program
-    Route::get('program/{program}/attendance/create', 'AttendanceController@createProgram')->name('attendance.create.program');
-    Route::post('program/{program}/attendance', 'AttendanceController@storeProgram')->name('attendance.store.program');
-
-    // Attendance by session
-    Route::get('program/{program}/session/{session}/attendance/create', 'AttendanceController@createSession')->name('attendance.create.session');
-    Route::post('program/{program}/session/{session}/attendance', 'AttendanceController@storeSession')->name('attendance.store.session');
 
     //Position
     Route::get('position/create', 'PositionController@create')->name('position.create');

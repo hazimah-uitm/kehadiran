@@ -4,7 +4,9 @@
     <div class="wrapper-main">
         <div class="container py-4">
             <div class="d-flex align-items-center justify-content-between mb-3">
-                <h2 class="mb-0">Senarai Program</h2>
+                <h2 class="fw-500 mb-3 mb-md-0 d-flex align-items-center flex-wrap" style="font-size: 1.4rem;">
+                    SENARAI PROGRAM
+                </h2>
 
                 <form method="GET" action="{{ route('public.programs') }}" class="d-flex align-items-center">
                     <label class="me-2 mb-0 small text-muted">Papar</label>
@@ -25,15 +27,12 @@
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title mb-1 text-wrap" title="{{ $program->title }}">{{ $program->title }}
                                 </h5>
-                                <div class="small text-muted mb-2">
-                                    Kod: <span class="fw-semibold">{{ $program->program_code }}</span>
-                                </div>
 
                                 <div class="mb-2 small">
                                     <div><i
-                                            class="bx bx-calendar me-1"></i>{{ \Carbon\Carbon::parse($program->start_date)->format('d M Y') }}
+                                            class="bx bx-calendar text-info me-1"></i>{{ \Carbon\Carbon::parse($program->start_date)->format('d M Y') }}
                                         – {{ \Carbon\Carbon::parse($program->end_date)->format('d M Y') }}</div>
-                                    <div><i class="bx bx-map me-1"></i>{{ $program->venue }}</div>
+                                    <div><i class="bx bx-map text-warning me-1"></i>{{ $program->venue }}</div>
                                 </div>
 
                                 @if (!empty($program->description))

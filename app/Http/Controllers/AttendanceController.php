@@ -137,7 +137,7 @@ class AttendanceController extends Controller
     // Borang attendance (by program / sesi)
     public function createProgram(Program $program)
     {
-        return view('pages.attendance.form', [
+        return view('pages.public.attendance.checkin', [
             'program'   => $program,
             'session'   => null,
             'postRoute' => route('attendance.store.program', $program->id),
@@ -148,7 +148,7 @@ class AttendanceController extends Controller
     {
         abort_unless($session->program_id === $program->id, 404);
 
-        return view('pages.attendance.form', [
+        return view('pages.public.attendance.checkin', [
             'program'   => $program,
             'session'   => $session,
             'postRoute' => route('attendance.store.session', [$program->id, $session->id]),

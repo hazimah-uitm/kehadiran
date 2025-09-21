@@ -57,9 +57,9 @@
             </div>
 
             {{-- Mesej berjaya --}}
-            @if (session('success'))
+            {{-- @if (session('success'))
                 <div class="alert alert-success">{{ session('success') }}</div>
-            @endif
+            @endif --}}
 
             <form method="POST" action="{{ $postRoute }}" id="attendanceForm" autocomplete="off">
                 {{ csrf_field() }}

@@ -6,9 +6,27 @@
             <a href="{{ route('public.programs') }}" class="btn btn-info btn-sm mb-3">← Kembali</a>
 
             <div class="card shadow-sm border-0">
+                <div class="card-header text-center text-white h6 text-uppercase d-flex justify-content-center align-items-center gap-2"
+                    style="background-color:#03244c;">
+                    <i class="bx bx-user-plus fs-5"></i>
+                    PENDAFTARAN PESERTA
+                </div>
                 <div class="card-body">
-                    <h5 class="mb-0 text-uppercase">{{ $str_mode ?? 'PENDAFTARAN PESERTA' }}</h5>
-                    <div class="small text-muted mb-3">Program: {{ $program->title }}</div>
+
+                    {{-- Tajuk program --}}
+                    <h5 class="mb-1">{{ $program->title }}</h5>
+
+                    {{-- Tarikh & lokasi --}}
+                    <div class="text-muted mb-4">
+                        <i class="bx bx-calendar text-info me-1"></i>
+                        {{ \Carbon\Carbon::parse($program->start_date)->format('d/m/Y') }}
+                        – {{ \Carbon\Carbon::parse($program->end_date)->format('d/m/Y') }}
+
+                        <span class="fw-semibold mx-2">•</span>
+
+                        <i class="bx bx-map text-warning me-1"></i>
+                        {{ $program->venue ?? '-' }}
+                    </div>
 
                     @if (session('success'))
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -77,7 +95,9 @@
                             </div>
                         </div>
 
-                        <div class="mt-3 d-flex gap-2">
+                        {{-- Butang submit di bawah, align kanan --}}
+                        <div class="mt-3 d-flex justify-content-between">
+                            <button type="reset" class="btn btn-outline-secondary">Reset</button>
                             <button type="submit" class="btn btn-primary">Hantar</button>
                         </div>
 

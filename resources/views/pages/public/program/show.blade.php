@@ -12,20 +12,42 @@
             </div>
 
             <div class="card shadow-sm border-0">
+                <div class="card-header text-center text-white h6 text-uppercase d-flex justify-content-center align-items-center gap-2"
+                    style="background-color:#03244c;">
+                    <i class='bx bx-user fs-5'></i>
+                    BUTIRAN PROGRAM
+                </div>
                 <div class="card-body">
-                    <h3 class="card-title mb-1">{{ $program->title }}</h3>
-                    <div class="small text-muted mb-3">
-                        Kod: <span class="fw-semibold">{{ $program->program_code }}</span>
+                    <h5 class="mb-0">{{ $program->title }}</h5>
+                    <div class="table-responsive small mt-2 mb-2">
+                        <table class="table table-sm table-borderless align-middle mb-0">
+                            <tbody>
+                                <tr>
+                                    <th class="fw-normal text-secondary" style="width:90px;">
+                                        <i class="bx bx-hash me-1 text-primary"></i> Kod
+                                    </th>
+                                    <td>{{ $program->program_code }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="fw-normal text-secondary">
+                                        <i class="bx bx-calendar me-1 text-info"></i> Tarikh
+                                    </th>
+                                    <td>
+                                        {{ \Carbon\Carbon::parse($program->start_time)->format('d/m/Y H:i') }}
+                                        – {{ \Carbon\Carbon::parse($program->end_time)->format('d/m/Y H:i') }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="fw-normal text-secondary">
+                                        <i class="bx bx-map me-1 text-warning"></i> Lokasi
+                                    </th>
+                                    <td class="text-break">{{ $program->venue }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
 
-                    <div class="mb-3 small">
-                        <div><i class="bx bx-calendar me-1"></i>
-                            {{ \Carbon\Carbon::parse($program->start_date)->format('d M Y') }}
-                            –
-                            {{ \Carbon\Carbon::parse($program->end_date)->format('d M Y') }}
-                        </div>
-                        <div><i class="bx bx-map me-1"></i>{{ $program->venue }}</div>
-                    </div>
+                    <hr class="my-2" />
 
                     @if (!empty($program->description))
                         <p class="mb-4">{{ $program->description }}</p>
