@@ -23,7 +23,7 @@ class AttendanceController extends Controller
         $request->validate([
             'participant_code' => 'required|string|max:191',
         ], [
-            'participant_code.required' => 'Please enter participant code or scan QR code',
+            'participant_code.required' => 'Please enter participant code or scan the QR code.',
         ]);
 
         $session = Session::with('program')
@@ -31,12 +31,11 @@ class AttendanceController extends Controller
             ->findOrFail($sessionId);
 
         if ((int) ($session->program->publish_status ?? 0) !== 1) {
-            return back()->with('error', 'Program has not been published.');
+            return back()->with('error', 'This program is not yet published.');
         }
 
         $code = trim($request->input('participant_code'));
 
-        // Benarkan cari ikut participant_code ATAU ic_passport
         $participant = Participant::where('program_id', $session->program->id)
             ->where(function ($q) use ($code) {
                 $q->where('participant_code', $code)
@@ -45,24 +44,30 @@ class AttendanceController extends Controller
             ->first();
 
         if (!$participant) {
-            return back()
-                ->withErrors(['participant_code' => 'Participant not found for this program.'])
-                ->withInput();
+            $registerUrl = route('public.participant.create', $session->program->id);
+            return back()->withErrors([
+                'participant_code' => 'Invalid participant code for this program. Please contact the organising secretariat or register here: ' . $registerUrl
+            ])->withInput();
         }
 
-        Attendance::firstOrCreate(
+        $attendance = Attendance::firstOrCreate(
             [
                 'program_id'     => $session->program->id,
                 'session_id'     => $session->id,
                 'participant_id' => $participant->id,
             ],
             [
-                'participant_code' => $participant->participant_code, // simpan untuk rujukan pantas
+                'participant_code' => $participant->participant_code,
             ]
         );
 
-        return back()->with('success', 'Attendance successfully recorded for: ' . $participant->name);
+        if ($attendance->wasRecentlyCreated) {
+            return back()->with('success', 'Thank you. Your attendance has been recorded.');
+        }
+
+        return back()->with('info', 'You have already checked in.');
     }
+
 
     public function indexProgram(Program $program, Request $request)
     {
@@ -158,49 +163,109 @@ class AttendanceController extends Controller
     // Simpan attendance (by program)
     public function storeProgram(Request $request, Program $program)
     {
-        $request->validate(['participant_code' => 'required']);
+        $request->validate(
+            ['participant_code' => 'required'],
+            ['participant_code.required' => 'Please enter participant code or scan the QR code.']
+        );
+
+        $code = trim($request->participant_code);
 
         $participant = Participant::where('program_id', $program->id)
-            ->where('participant_code', $request->participant_code)
+            ->where(function ($q) use ($code) {
+                $q->where('participant_code', $code)
+                    ->orWhere('ic_passport', $code);
+            })
             ->first();
 
         if (!$participant) {
-            return back()->withErrors(['participant_code' => 'Invalid participant code'])->withInput();
+            $registerUrl = route('public.participant.create', $program->id);
+            $checkUrl = route('public.participant.check', $program->id);
+
+            return back()
+                ->withErrors(['participant_code' => 'Registration not found for this program.'])
+                ->with('error', "
+    Invalid Participant Code. <div class='text-muted'>
+        Please ensure you enter your <strong>Participant Code</strong>, not your IC/Passport number:
+        <ul class='mb-0'>
+            <li><a href=\"{$checkUrl}\" target=\"_blank\">Check your Participant Code here</a> if you already registered.</li>
+            <li><a href=\"{$registerUrl}\" target=\"_blank\">Register here</a> if you have not registered.</li>
+        </ul>
+    </div>
+")
+                ->withInput();
         }
 
-        Attendance::firstOrCreate([
-            'program_id'     => $program->id,
-            'session_id'     => null,
-            'participant_id' => $participant->id,
-        ], [
-            'participant_code' => $request->participant_code,
-        ]);
+        $attendance = Attendance::firstOrCreate(
+            [
+                'program_id'     => $program->id,
+                'session_id'     => null,
+                'participant_id' => $participant->id,
+            ],
+            [
+                'participant_code' => $participant->participant_code,
+            ]
+        );
 
-        return back()->with('success', 'Attendance recorded successfully.');
+        if ($attendance->wasRecentlyCreated) {
+            return back()->with('success', 'Thank you. Your attendance has been recorded.');
+        }
+
+        return back()->with('info', 'You have already checked in.');
     }
+
 
     // Simpan attendance (by session)
     public function storeSession(Request $request, Program $program, Session $session)
     {
         abort_unless($session->program_id === $program->id, 404);
-        $request->validate(['participant_code' => 'required']);
+
+        $request->validate(
+            ['participant_code' => 'required'],
+            ['participant_code.required' => 'Please enter participant code or scan the QR code.']
+        );
+
+        $code = trim($request->participant_code);
 
         $participant = Participant::where('program_id', $program->id)
-            ->where('participant_code', $request->participant_code)
+            ->where(function ($q) use ($code) {
+                $q->where('participant_code', $code)
+                    ->orWhere('ic_passport', $code);
+            })
             ->first();
 
         if (!$participant) {
-            return back()->withErrors(['participant_code' => 'Invalid participant code'])->withInput();
+            $registerUrl = route('public.participant.create', $program->id);
+            $checkUrl = route('public.participant.check', $program->id);
+
+            return back()
+                ->withErrors(['participant_code' => 'Registration not found for this program.'])
+                ->with('error', "
+    Invalid Participant Code. <div class='text-muted'>
+        Please ensure you enter your <strong>Participant Code</strong>, not your IC/Passport number:
+        <ul class='mb-0'>
+            <li><a href=\"{$checkUrl}\" target=\"_blank\">Check your Participant Code here</a> if you already registered.</li>
+            <li><a href=\"{$registerUrl}\" target=\"_blank\">Register here</a> if you have not registered.</li>
+        </ul>
+    </div>
+")
+                ->withInput();
         }
 
-        Attendance::firstOrCreate([
-            'program_id'     => $program->id,
-            'session_id'     => $session->id,
-            'participant_id' => $participant->id,
-        ], [
-            'participant_code' => $request->participant_code,
-        ]);
+        $attendance = Attendance::firstOrCreate(
+            [
+                'program_id'     => $program->id,
+                'session_id'     => $session->id,
+                'participant_id' => $participant->id,
+            ],
+            [
+                'participant_code' => $participant->participant_code,
+            ]
+        );
 
-        return back()->with('success', 'Attendance recorded successfully.');
+        if ($attendance->wasRecentlyCreated) {
+            return back()->with('success', 'Thank you. Your attendance has been recorded.');
+        }
+
+        return back()->with('info', 'You have already checked in.');
     }
 }
