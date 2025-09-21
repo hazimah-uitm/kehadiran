@@ -17,7 +17,7 @@
                     <h5 class="mb-1">{{ $program->title }}</h5>
 
                     {{-- Tarikh & lokasi --}}
-                    <div class="text-muted mb-4">
+                    <div class="text-muted mb-2">
                         <i class="bx bx-calendar text-info me-1"></i>
                         {{ \Carbon\Carbon::parse($program->start_date)->format('d/m/Y') }}
                         – {{ \Carbon\Carbon::parse($program->end_date)->format('d/m/Y') }}
@@ -46,7 +46,7 @@
                     <form method="POST" action="{{ $save_route }}" autocomplete="off">
                         {{ csrf_field() }}
 
-                        <div class="row g-3">
+                        <div class="row g-3 mt-2">
                             <div class="col-md-6">
                                 <label class="form-label">Nama Penuh</label>
                                 <input type="text" name="name" value="{{ old('name') }}"
@@ -97,14 +97,20 @@
                             </div>
                         </div>
 
+                        {{-- Alert makluman simpan QR --}}
+                        <div class="alert alert-info d-flex align-items-start align-items-center gap-2 p-2 small mt-3 mb-3"
+                            role="alert">
+                            <i class="bx bx-info-circle fs-6 mt-1"></i>
+                            <div>
+                                Kod peserta dan QR akan dijana secara automatik selepas pendaftaran berjaya.
+                                Sila <strong>simpan Kod Peserta &amp; QR Code</strong> untuk rekod kehadiran anda semasa program.
+                            </div>
+                        </div>
+
                         {{-- Butang submit di bawah, align kanan --}}
                         <div class="mt-3 d-flex justify-content-between">
                             <button type="reset" class="btn btn-outline-secondary">Reset</button>
                             <button type="submit" class="btn btn-primary">Hantar</button>
-                        </div>
-
-                        <div class="small text-muted mt-3">
-                            Nota: Kod peserta dan QR akan dijana secara automatik selepas pendaftaran berjaya.
                         </div>
                     </form>
                 </div>
