@@ -16,12 +16,12 @@
                 <h5 class="mb-1">{{ $program->title }}</h5>
 
                 {{-- Tarikh & lokasi --}}
-                <div class="text-muted mb-3">
+                <div class="small text-muted mb-3">
                     <i class="bx bx-calendar text-info me-1"></i>
                     {{ \Carbon\Carbon::parse($program->start_date)->format('d/m/Y') }}
                     – {{ \Carbon\Carbon::parse($program->end_date)->format('d/m/Y') }}
 
-                    <span class="fw-semibold mx-2">•</span>
+                    <span class="fw-semibold mx-2"></span>
 
                     <i class="bx bx-map text-warning me-1"></i>
                     {{ $program->venue ?? '-' }}
@@ -29,10 +29,10 @@
 
                 <hr class="my-2" />
 
-                <form method="POST" action="{{ route('public.participant.check.submit', $program->id) }}" class="row g-3">
+                <form method="POST" action="{{ route('public.participant.check.submit', $program->id) }}" class="row g-3 mt-1">
                     {{ csrf_field() }}
                     <div class="col-12">
-                        <label class="form-label">IC / Passport No.</label>
+                        <label class="form-label">Please enter your IC / Passport No.</label>
                         <input type="text" name="ic_passport" value="{{ old('ic_passport') }}" class="form-control {{ $errors->has('ic_passport') ? 'is-invalid' : '' }}" required>
                         @if ($errors->has('ic_passport'))
                         <div class="invalid-feedback">
