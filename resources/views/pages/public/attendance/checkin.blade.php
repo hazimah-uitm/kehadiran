@@ -5,17 +5,16 @@
         <div class="container py-4" style="max-width:720px;">
 
             {{-- Back button (public listing) --}}
-            <a href="{{ route('public.programs') }}" class="btn btn-info btn-sm mb-3">← Kembali</a>
+            <a href="{{ route('public.programs') }}" class="btn btn-info btn-sm mb-3">← Back</a>
 
             <div class="card shadow-sm border-0">
                 <div class="card-header text-center text-white h6 text-uppercase d-flex justify-content-center align-items-center gap-2"
                     style="background-color:#03244c;">
                     <i class='bx bx-user-check fs-5'></i>
-                    KEHADIRAN PESERTA
+                    ATTENDANCE CHECK-IN
                 </div>
                 <div class="card-body">
 
-                    {{-- Konteks supaya pengguna yakin --}}
                     <h5 class="mb-0">{{ $program->title }}</h5>
 
                     <div class="table-responsive small mt-2">
@@ -23,20 +22,20 @@
                             <tbody>
                                 <tr>
                                     <th class="fw-normal text-secondary" style="width:90px;">
-                                        <i class="bx bx-hash me-1 text-primary"></i> Kod
+                                        <i class="bx bx-hash me-1 text-primary"></i> Program code
                                     </th>
                                     <td>{{ $program->program_code }}</td>
                                 </tr>
                                 @if ($session)
                                     <tr>
                                         <th class="fw-normal text-secondary">
-                                            <i class="bx bx-layer me-1 text-success"></i> Sesi
+                                            <i class="bx bx-layer me-1 text-success"></i> Session
                                         </th>
                                         <td class="text-break">{{ $session->title }}</td>
                                     </tr>
                                     <tr>
                                         <th class="fw-normal text-secondary">
-                                            <i class="bx bx-calendar me-1 text-info"></i> Tarikh
+                                            <i class="bx bx-calendar me-1 text-info"></i> Date
                                         </th>
                                         <td>
                                             {{ \Carbon\Carbon::parse($session->start_time)->format('d/m/Y H:i') }}
@@ -45,7 +44,7 @@
                                     </tr>
                                     <tr>
                                         <th class="fw-normal text-secondary">
-                                            <i class="bx bx-map me-1 text-warning"></i> Lokasi
+                                            <i class="bx bx-map me-1 text-warning"></i> Venue
                                         </th>
                                         <td class="text-break">{{ $session->venue }}</td>
                                     </tr>
@@ -75,10 +74,10 @@
                         {{ csrf_field() }}
 
                         <div class="mb-3">
-                            <label for="participant_code" class="form-label">Kod Peserta</label>
+                            <label for="participant_code" class="form-label">Participant Code</label>
                             <input type="text" id="participant_code" name="participant_code"
                                 class="form-control {{ $errors->has('participant_code') ? 'is-invalid' : '' }}"
-                                value="{{ old('participant_code') }}" placeholder="Imbas atau taip kod peserta" autofocus>
+                                value="{{ old('participant_code') }}" placeholder="Scan or Enter Participant Code" autofocus>
                             @if ($errors->has('participant_code'))
                                 <div class="invalid-feedback">
                                     @foreach ($errors->get('participant_code') as $error)
@@ -90,7 +89,7 @@
 
                         <div class="mt-3 d-flex justify-content-between">
                             <button type="button" id="clearBtn" class="btn btn-outline-secondary">Reset</button>
-                            <button type="submit" class="btn btn-primary">Hantar</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
                         </div>
                     </form>
 
@@ -139,14 +138,14 @@
                 @endif
             });
 
-            // Auto-dismiss alert selepas 3s
+            // Auto-dismiss alert selepas 2s
             setTimeout(function() {
                 const alerts = document.querySelectorAll('.alert');
                 alerts.forEach(alert => {
                     const bsAlert = new bootstrap.Alert(alert);
                     bsAlert.close();
                 });
-            }, 3000);
+            }, 2000);
         })();
     </script>
 

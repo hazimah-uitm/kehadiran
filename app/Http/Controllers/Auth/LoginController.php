@@ -51,7 +51,7 @@ class LoginController extends Controller
 
     public function authenticated(Request $request, $user)
     {
-        return redirect()->route('home')->with('success', 'Anda telah berjaya log masuk!');
+        return redirect()->route('home')->with('success', 'You have successfully logged in!');
     }
 
     public function logout(Request $request)
@@ -62,7 +62,7 @@ class LoginController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/')->with('success', 'Anda telah berjaya log keluar!');
+        return redirect('/')->with('success', 'You have successfully logged out!');
     }
 
     public function username()
@@ -78,7 +78,7 @@ class LoginController extends Controller
             return redirect()->back()
                 ->withInput($request->only($this->username(), 'remember'))
                 ->withErrors([
-                    $this->username() => 'Akaun anda tidak aktif. Sila hubungi admin sistem.',
+                    $this->username() => 'AYour account is inactive. Please contact system administrator',
                 ]);
         }
 
@@ -86,7 +86,7 @@ class LoginController extends Controller
             return redirect()->back()
                 ->withInput($request->only($this->username(), 'remember'))
                 ->withErrors([
-                    $this->username() => 'Emel anda belum disahkan. Sila semak inbox anda untuk pautan pengesahan.',
+                    $this->username() => 'Your email address has not been verified. Please check your inbox for the verification link.',
                 ]);
         }
 
@@ -112,13 +112,13 @@ class LoginController extends Controller
 
         if (!$user) {
             return back()->withErrors([
-                'email' => 'Emel anda tidak didaftarkan dalam sistem. Sila hubungi moderator (Hazimah - +6082678118).'
+                'email' => 'Your email is not registered in the system. Please contact the moderator (Hazimah – +6082678118).'
             ]);
         }
 
         if ($user->email_verified_at) {
             return back()->withErrors([
-                'email' => 'Akaun anda telah disahkan. Sila log masuk seperti biasa.'
+                'email' => 'Your account has been verified. Please log in as usual.'
             ]);
         }
 
@@ -135,6 +135,6 @@ class LoginController extends Controller
 
         $user->notify(new EmailVerificationNotification($user, $token));
 
-        return back()->with('status', 'Pautan pengesahan emel telah dihantar semula ke emel anda. Sila semak inbox anda.');
+        return back()->with('status', 'A new email verification link has been sent to your email. Please check your inbox.');
     }
 }

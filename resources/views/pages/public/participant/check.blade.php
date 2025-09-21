@@ -32,7 +32,7 @@
                 <form method="POST" action="{{ route('public.participant.check.submit', $program->id) }}" class="row g-3">
                     {{ csrf_field() }}
                     <div class="col-12">
-                        <label class="form-label">IC / Passport</label>
+                        <label class="form-label">IC / Passport No.</label>
                         <input type="text" name="ic_passport" value="{{ old('ic_passport') }}" class="form-control {{ $errors->has('ic_passport') ? 'is-invalid' : '' }}" required>
                         @if ($errors->has('ic_passport'))
                         <div class="invalid-feedback">
@@ -45,7 +45,7 @@
 
                     <div class="mt-3 d-flex justify-content-between">
                         <button type="button" id="btnReset" class="btn btn-outline-secondary">Reset</button>
-                        <button type="submit" class="btn btn-primary">Semak</button>
+                        <button type="submit" class="btn btn-primary">Check</button>
                     </div>
                 </form>
             </div>

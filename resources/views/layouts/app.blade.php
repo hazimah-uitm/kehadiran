@@ -19,7 +19,7 @@
     {{-- Tom Select CSS + JS --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.bootstrap5.min.css">
 
-    <title>{{ config('app.name', 'Sistem Kehadiran') }}</title>
+    <title>{{ config('app.name', 'Attendance System') }}</title>
     <style>
         /* tinggi anggaran navbar */
         :root {
@@ -49,7 +49,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg fixed-top custom-navbar">
         <div class="container">
-            <a class="navbar-brand text-uppercase" href="{{ route('public.programs') }}">Sistem Kehadiran</a>
+            <a class="navbar-brand text-uppercase" href="{{ route('public.programs') }}">Attendance System</a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,12 +59,15 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-lg-center">
                     <li class="nav-item">
-                        <a class="nav-link text-uppercase" href="{{ route('public.programs') }}">Senarai Program</a>
+                        <a class="nav-link text-uppercase" href="{{ route('public.programs') }}">Program List</a>
                     </li>
 
                     @guest
-                    <li class="nav-item">
-                        <a class="nav-link text-uppercase" href="{{ route('login') }}">Log Masuk Admin</a>
+                    <li class="nav-item ms-lg-2">
+                        <a class="btn btn-sm btn-outline-primary text-uppercase d-flex align-items-center gap-1"
+                            href="{{ route('login') }}">
+                            <i class="bx bx-log-in"></i> Login
+                        </a>
                     </li>
                     @endguest
 
@@ -72,11 +75,12 @@
                     <li class="nav-item">
                         <a class="nav-link text-uppercase" href="{{ route('home') }}">Dashboard</a>
                     </li>
-                    <li class="nav-item">
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="ms-lg-2">
+                    <li class="nav-item ms-lg-2">
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST">
                             {{ csrf_field() }}
-                            <button type="submit" class="btn btn-sm btn-outline-dark text-uppercase">Log
-                                Keluar</button>
+                            <button type="submit" class="btn btn-sm btn-outline-warning text-uppercase d-flex align-items-center gap-1">
+                                <i class="bx bx-log-out"></i> Log Out
+                            </button>
                         </form>
                     </li>
                     @endhasanyrole
@@ -85,22 +89,6 @@
         </div>
     </nav>
     <!-- End Navbar -->
-
-    <!-- Floating alerts -->
-    {{-- <div class="container mt-2">
-        @if (session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ session('success') }}
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-    @endif
-    @if (session('error'))
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        {{ session('error') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-    @endif
-    </div> --}}
 
     {{-- PAGE CONTENT --}}
     @yield('content')

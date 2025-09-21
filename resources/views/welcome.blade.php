@@ -4,12 +4,12 @@
 <div class="wrapper-main">
     <div class="container py-4">
         <div class="d-flex align-items-center justify-content-between mb-3">
-            <h2 class="fw-500 mb-3 mb-md-0 d-flex align-items-center flex-wrap" style="font-size: 1.4rem;">
-                SENARAI PROGRAM
+            <h2 class="fw-500 mb-3 mb-md-0 d-flex align-items-center flex-wrap" style="font-size: 1.3rem;">
+                PROGRAM LIST
             </h2>
 
             <form method="GET" action="{{ route('public.programs') }}" class="d-flex align-items-center">
-                <label class="me-2 mb-0 small text-muted">Papar</label>
+                <label class="me-2 mb-0 small text-muted">Show</label>
                 <select name="perPage" class="form-select form-select-sm" onchange="this.form.submit()">
                     @foreach ([6, 12, 24, 48] as $n)
                     <option value="{{ $n }}"
@@ -19,7 +19,29 @@
                 </select>
             </form>
         </div>
+        <!-- Floating alerts -->
+        @if (session('success'))
+        <div id="floating-success-message" class="position-fixed top-0 start-50 translate-middle-x p-3"
+            style="z-index: 1050; display: none; animation: fadeInUp 0.5s ease-out;">
+            <div class="alert alert-success alert-dismissible fade show bg-light bg-opacity-75"
+                role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                    aria-label="Close"></button>
+            </div>
+        </div>
 
+        <!-- JavaScript to show the message after the page is loaded -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var floatingMessage = document.getElementById('floating-success-message');
+                floatingMessage.style.display = 'block';
+                setTimeout(function() {
+                    floatingMessage.style.display = 'none';
+                }, 4500); // Adjust the timeout (in milliseconds) based on how long you want the message to be visible
+            });
+        </script>
+        @endif
         <div class="row g-3">
             @forelse($programs as $program)
             <div class="col-12 col-md-6 col-lg-6">
@@ -83,21 +105,21 @@
                             <div class="col-12 col-sm">
                                 <a href="{{ route('public.participant.create', $program->id) }}"
                                     class="btn btn-primary btn-sm d-inline-flex align-items-center justify-content-center px-2 py-1 w-100">
-                                    <i class="bx bx-user-plus me-1"></i>Pendaftaran
+                                    <i class="bx bx-user-plus me-1"></i>Registration
                                 </a>
                             </div>
 
                             <div class="col-12 col-sm">
                                 <a href="{{ route('public.participant.check', $program->id) }}"
                                     class="btn btn-warning btn-sm d-inline-flex align-items-center justify-content-center px-2 py-1 w-100">
-                                    <i class="bx bx-grid-alt me-1"></i>Jana Kod QR
+                                    <i class="bx bx-grid-alt me-1"></i>Generate QR Code
                                 </a>
                             </div>
 
                             <div class="col-12 col-sm">
                                 <a href="{{ route('public.program.show', $program->id) }}"
                                     class="btn btn-info btn-sm d-inline-flex align-items-center justify-content-center px-2 py-1 w-100">
-                                    <span class="text-nowrap">Butiran Program →</span>
+                                    <span class="text-nowrap">Details →</span>
                                 </a>
                             </div>
                         </div>
@@ -106,7 +128,7 @@
             </div>
             @empty
             <div class="col-12">
-                <div class="alert alert-light border">Tiada program ditemui.</div>
+                <div class="alert alert-light border">No programs available.</div>
             </div>
             @endforelse
         </div>

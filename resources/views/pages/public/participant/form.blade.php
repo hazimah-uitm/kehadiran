@@ -9,7 +9,7 @@
             <div class="card-header text-center text-white h6 text-uppercase d-flex justify-content-center align-items-center gap-2"
                 style="background-color:#03244c;">
                 <i class="bx bx-user-plus fs-5"></i>
-                PARTICIPANT REGISTRATION
+                REGISTRATION
             </div>
             <div class="card-body">
 
@@ -17,12 +17,12 @@
                 <h5 class="mb-1">{{ $program->title }}</h5>
 
                 {{-- Tarikh & lokasi --}}
-                <div class="text-muted mb-2">
+                <div class="small text-muted mb-2">
                     <i class="bx bx-calendar text-info me-1"></i>
                     {{ \Carbon\Carbon::parse($program->start_date)->format('d/m/Y') }}
                     – {{ \Carbon\Carbon::parse($program->end_date)->format('d/m/Y') }}
 
-                    <span class="fw-semibold mx-2">•</span>
+                    <span class="fw-semibold mx-2"></span>
 
                     <i class="bx bx-map text-warning me-1"></i>
                     {{ $program->venue ?? '-' }}
@@ -153,7 +153,7 @@
                         <i class="bx bx-info-circle fs-6 mt-1"></i>
                         <div>
                             The Participant Code and QR Code will be generated automatically after successful registration.
-                            Please <strong>download your QR Code</strong>, as it will be required to check in for attendance during the program.
+                            Please <strong>save your particpant code and download your QR Code</strong>, as it will be required to check in for attendance during the program.
                         </div>
                     </div>
 

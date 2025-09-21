@@ -5,7 +5,7 @@
 @section('content')
 <div class="wrapper-main">
     <div class="container py-4" style="max-width:980px;">
-        <a href="{{ route('public.programs') }}" class="btn btn-info btn-sm mb-3">← Kembali</a>
+        <a href="{{ route('public.programs') }}" class="btn btn-info btn-sm mb-3">← Back</a>
 
         {{-- Alert inline (ikut layout public) --}}
         @if (session('success'))
@@ -19,7 +19,7 @@
             <div class="card-header text-center text-white h6 text-uppercase d-flex justify-content-center align-items-center gap-2"
                 style="background-color:#03244c;">
                 <i class='bx bx-user fs-5'></i>
-                MAKLUMAT PESERTA
+                PARTICIPANT DETAILS
             </div>
             <div class="card-body">
                 <h5 class="mb-1">{{ $program->title }}</h5>
@@ -42,19 +42,19 @@
                     <div class="col-lg-7">
                         <table class="table table-borderless mb-0">
                             <tr>
-                                <th style="width:180px;">Nama</th>
+                                <th style="width:180px;">Full Name</th>
                                 <td>{{ $participant->name }}</td>
                             </tr>
                             <tr>
-                                <th>Warganegara</th>
+                                <th>Nationality</th>
                                 <td>{{ $participant->nationality ?? '-' }}</td>
                             </tr>
                             <tr>
-                                <th>Institusi</th>
+                                <th>Institution / Organization</th>
                                 <td>{{ $participant->institution ?? '-' }}</td>
                             </tr>
                             <tr>
-                                <th>Kod Peserta</th>
+                                <th>Participant Code</th>
                                 <td>
                                     @if ($participant->participant_code)
                                     <div class="input-group input-group-sm" style="max-width:260px;">
@@ -62,7 +62,7 @@
                                             value="{{ $participant->participant_code }}" readonly>
                                         <button type="button" class="btn btn-secondary"
                                             onclick="navigator.clipboard.writeText('{{ $participant->participant_code }}')">
-                                            Salin
+                                            Copy
                                         </button>
                                     </div>
                                     @else
@@ -75,18 +75,18 @@
 
                     <div class="col-lg-5">
                         <div class="border rounded p-3 text-center">
-                            <div class="mb-2 fw-semibold">Kod QR</div>
+                            <div class="mb-2 fw-semibold">QR Code</div>
                             @if ($participant->qr_path)
                             <img src="{{ asset('public/storage/' . $participant->qr_path) }}" alt="QR"
                                 style="max-height:180px;">
                             <div class="mt-2">
                                 <a class="btn btn-sm btn-primary"
                                     href="{{ asset('public/storage/' . $participant->qr_path) }}" download>
-                                    Muat Turun QR
+                                    Download QR
                                 </a>
                             </div>
                             @else
-                            <div class="text-muted small">QR belum dijana.</div>
+                            <div class="text-muted small">QR Code has not been generated.</div>
                             @endif
                         </div>
                     </div>
