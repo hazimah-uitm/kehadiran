@@ -8,8 +8,8 @@
         <div class="card shadow-sm border-0">
             <div class="card-header text-center text-white h6 text-uppercase d-flex justify-content-center align-items-center gap-2"
                 style="background-color:#03244c;">
-                <i class="bx bx-user-plus fs-5"></i>
-                SEMAK KOD QR
+                <i class='bx bx-grid-alt fs-5'></i>
+                JANA KOD QR
             </div>
             <div class="card-body">
                 {{-- Tajuk program --}}
