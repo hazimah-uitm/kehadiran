@@ -41,6 +41,7 @@
                 <div class="menu-title">User Role</div>
             </a>
         </li>
+        @endrole
 
         <li class="menu-label">Record Management</li>
 
@@ -51,7 +52,7 @@
             </a>
         </li>
 
-
+        @role('Superadmin')
         <li class="menu-label">Setting</li>
 
         <li class="{{ Request::is('campus*') ? 'mm-active' : '' }}">

@@ -80,10 +80,20 @@
                         </div>
 
                         {{-- Butang Kehadiran --}}
-                        <!-- <a href="{{ route('attendance.create.session', ['program' => $program->id, 'session' => $session->id]) }}"
+                        @php
+                        $start = $session->start_time ? \Carbon\Carbon::parse($session->start_time) : null;
+                        // Zon waktu Malaysia (kalau app timezone bukan Asia/Kuala_Lumpur)
+                        $nowMy = \Carbon\Carbon::now('Asia/Kuala_Lumpur');
+                        @endphp
+
+                        {{--  @if ($session->id == 8 && $start && $nowMy->isSameDay($start)) --}}
+                        @if ($session->id == 8)
+                        <a href="{{ route('attendance.create.session', ['program' => $program->id, 'session' => $session->id]) }}"
                             class="btn btn-sm btn-success" target="_blank">
                             <i class="bx bx-list-check"></i> Attendance Check-in
-                        </a> -->
+                        </a>
+                        @endif
+
                     </div>
                     @endforeach
                 </div>
