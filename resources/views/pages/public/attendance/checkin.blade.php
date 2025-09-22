@@ -66,7 +66,7 @@
                             value="{{ old('participant_code') }}" placeholder="Scan or Enter Participant Code" autofocus>
                         @if (session('error'))
                         <div class="invalid-feedback d-block mt-2">
-                            <div class="p-2 rounded small bg-danger-subtle border border-danger">
+                            <div class="p-2 rounded bg-danger-subtle border border-danger">
                                 {!! session('error') !!}
                             </div>
                         </div>

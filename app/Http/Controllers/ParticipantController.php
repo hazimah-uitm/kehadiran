@@ -44,12 +44,16 @@ class ParticipantController extends Controller
             ->first();
 
         if (!$participant) {
-            return back()->withErrors(['ic_passport' => 'No record found for this program.'])->withInput();
+            $registerUrl = route('public.participant.create', $program->id);
+            return back()->withErrors(['ic_passport' => 'No record found for this program.'])
+                ->with('error', "
+    No record found for this program. <pclass='text-dark'>
+        <a href=\"{$registerUrl}\" target=\"_blank\">Click here to register</a>.
+    </p>
+")->withInput();
         }
 
-        // Pastikan QR wujud; kalau hilang, jana semula menggunakan participant_code sedia ada
         if (!$participant->participant_code) {
-            // fallback: kalau entah macam mana tiada kod, kau boleh generate atau block
             return back()->withErrors(['ic_passport' => 'Participant code not yet available.']);
         }
 
