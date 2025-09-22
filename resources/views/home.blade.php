@@ -23,7 +23,7 @@
 
     <div class="row g-3">
         @forelse($programs as $program)
-        <div class="col-12 col-md-6 col-lg-6">
+        <div class="col-12 col-md-8 col-lg-8">
             <div class="card h-100 shadow-sm border-0">
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title mb-1 text-wrap" title="{{ $program->title }}">{{ $program->title }}</h5>
