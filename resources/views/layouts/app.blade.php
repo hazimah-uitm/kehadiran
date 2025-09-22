@@ -64,7 +64,7 @@
 
                     @guest
                     <li class="nav-item ms-lg-2">
-                        <a class="btn btn-sm btn-outline-primary text-uppercase d-flex align-items-center gap-1"
+                        <a class="btn btn-sm btn-primary text-uppercase d-flex align-items-center gap-1"
                             href="{{ route('login') }}">
                             <i class="bx bx-log-in"></i> Login
                         </a>
@@ -78,7 +78,7 @@
                     <li class="nav-item ms-lg-2">
                         <form id="logout-form" action="{{ route('logout') }}" method="POST">
                             {{ csrf_field() }}
-                            <button type="submit" class="btn btn-sm btn-outline-warning text-uppercase d-flex align-items-center gap-1">
+                            <button type="submit" class="btn btn-sm btn-warning text-uppercase d-flex align-items-center gap-1">
                                 <i class="bx bx-log-out"></i> Log Out
                             </button>
                         </form>

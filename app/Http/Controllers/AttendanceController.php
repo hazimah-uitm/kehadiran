@@ -184,7 +184,7 @@ class AttendanceController extends Controller
             return back()
                 ->withErrors(['participant_code' => 'Registration not found for this program.'])
                 ->with('error', "
-    Invalid Participant Code. <div class='text-muted'>
+    Invalid Participant Code. <div class='text-dark'>
         Please ensure you enter your <strong>Participant Code</strong>, not your IC/Passport number:
         <ul class='mb-0'>
             <li><a href=\"{$checkUrl}\" target=\"_blank\">Check your Participant Code here</a> if you already registered.</li>
