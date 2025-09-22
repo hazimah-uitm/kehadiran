@@ -186,7 +186,7 @@
                 const bsAlert = new bootstrap.Alert(alert);
                 bsAlert.close();
             });
-        }, 2000);
+        }, 3000);
     })();
 </script>
 
