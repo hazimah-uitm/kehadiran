@@ -64,10 +64,11 @@
                             <label class="form-label">IC/Passport No.</label>
                             <input type="text" name="ic_passport" value="{{ old('ic_passport') }}"
                                 class="form-control {{ $errors->has('ic_passport') ? 'is-invalid' : '' }}">
+                            <!-- <div class="form-text">Please enter without dashes (-) or spaces (e.g., 901231011234).</div> -->
                             @if ($errors->has('ic_passport'))
                             <div class="invalid-feedback">
                                 @foreach ($errors->get('ic_passport') as $error)
-                                {{ $error }}
+                                 {!! $error !!}
                                 @endforeach
                             </div>
                             @endif
@@ -153,7 +154,7 @@
                         <i class="bx bx-info-circle fs-6 mt-1"></i>
                         <div>
                             The Participant Code and QR Code will be generated automatically after successful registration.
-                            Please <strong>save your particpant code and download your QR Code</strong>, as it will be required to check in for attendance during the program.
+                            Please <strong>save your participant code and download your QR Code</strong>, as it will be required to check in for attendance during the program.
                         </div>
                     </div>
 

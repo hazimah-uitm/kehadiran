@@ -47,9 +47,7 @@ class ParticipantController extends Controller
             return back()->withErrors(['ic_passport' => 'No record found for this program.'])->withInput();
         }
 
-        // Pastikan QR wujud; kalau hilang, jana semula menggunakan participant_code sedia ada
         if (!$participant->participant_code) {
-            // fallback: kalau entah macam mana tiada kod, kau boleh generate atau block
             return back()->withErrors(['ic_passport' => 'Participant code not yet available.']);
         }
 
@@ -57,11 +55,10 @@ class ParticipantController extends Controller
             $this->regenerateParticipantQr($program->id, $participant);
         }
 
-        // Redirect ke paparan peserta (public)
         return redirect()->route('public.participant.show', [$program->id, $participant->id]);
     }
 
-    /** Helper: jana semula QR peserta jika fail tiada */
+
     private function regenerateParticipantQr($programId, Participant $participant)
     {
         $dir  = "qrcodes/{$programId}";
@@ -71,7 +68,6 @@ class ParticipantController extends Controller
             Storage::disk('public')->makeDirectory($dir);
         }
 
-        // Pastikan ada participant_code sedia ada
         $code = $participant->participant_code;
         if (!$code) {
             throw new \RuntimeException('Participant code not available for regeneration.');
@@ -84,10 +80,8 @@ class ParticipantController extends Controller
 
     public function showPublic($programId, $participantId)
     {
-        // Program mesti published
         $program = Program::where('publish_status', 1)->findOrFail($programId);
 
-        // Peserta mestilah milik program ini
         $participant = Participant::where('program_id', $program->id)
             ->findOrFail($participantId);
 
@@ -113,6 +107,13 @@ class ParticipantController extends Controller
             ->where('publish_status', 1)
             ->findOrFail($programId);
 
+
+        $request->merge([
+            'ic_passport' => preg_replace('/[\s-]+/', '', $request->ic_passport),
+        ]);
+
+        $checkUrl = route('public.participant.check', $program->id);
+
         $request->validate([
             'name'             => 'required|string|max:191',
             'ic_passport'      => 'required|string|max:191|unique:participants,ic_passport,NULL,id,program_id,' . $program->id,
@@ -123,7 +124,7 @@ class ParticipantController extends Controller
         ], [
             'name.required'        => 'Please enter the full name',
             'ic_passport.required' => 'Please enter IC/Passport number',
-            'ic_passport.unique'   => 'This IC/Passport already exists in this program',
+               'ic_passport.unique'   => 'This IC/Passport already exists in this program. Please check the participant Code <a href="' . $checkUrl . '" target="_blank">here</a>',
             'ic_passport.max'      => 'IC/Passport cannot exceed 191 characters',
             'phone_no.max'         => 'Phone number cannot exceed 30 characters',
         ]);
@@ -194,6 +195,10 @@ class ParticipantController extends Controller
 
     public function store(Program $program, Request $request)
     {
+        $request->merge([
+            'ic_passport' => preg_replace('/[\s-]+/', '', $request->ic_passport),
+        ]);
+
         $request->validate([
             'name'             => 'required|string|max:191',
             'ic_passport'      => 'required|string|max:191|unique:participants,ic_passport,NULL,id,program_id,' . $program->id,
