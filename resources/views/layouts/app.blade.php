@@ -66,7 +66,7 @@
                     <li class="nav-item ms-lg-2">
                         <a class="btn btn-sm btn-primary text-uppercase d-flex align-items-center gap-1"
                             href="{{ route('login') }}">
-                            <i class="bx bx-log-in"></i> Login
+                            <i class="bx bx-log-in"></i> Admin Login
                         </a>
                     </li>
                     @endguest
