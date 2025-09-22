@@ -112,7 +112,7 @@
                             <div class="col-12 col-sm">
                                 <a href="{{ route('public.participant.check', $program->id) }}"
                                     class="btn btn-warning btn-sm d-inline-flex align-items-center justify-content-center px-2 py-1 w-100">
-                                    <i class="bx bx-grid-alt me-1"></i>Generate QR Code
+                                    <i class="bx bx-grid-alt me-1"></i>Check QR Code
                                 </a>
                             </div>
 
