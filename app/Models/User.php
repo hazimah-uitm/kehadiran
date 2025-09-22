@@ -65,4 +65,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Position::class);
     }
+
+    public function ptj()
+    {
+        return $this->belongsTo(Ptj::class);
+    }
 }
