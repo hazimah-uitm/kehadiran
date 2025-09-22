@@ -9,7 +9,7 @@
                 <div class="card-header text-center text-white h6 text-uppercase d-flex justify-content-center align-items-center gap-2"
                     style="background-color:#03244c;">
                     <i class='bx bx-grid-alt fs-5'></i>
-                    GENERATE QR CODE
+                    CHECK QR CODE
                 </div>
                 <div class="card-body">
                     {{-- Tajuk program --}}

@@ -187,6 +187,7 @@ Route::middleware('auth')->group(function () {
             Route::get('participant/{participant}/edit', 'ParticipantController@edit')->name('participant.edit')->where('participant', '[0-9]+');
             Route::put('participant/{participant}', 'ParticipantController@update')->name('participant.update')->where('participant', '[0-9]+');
             Route::delete('participant/{participant}', 'ParticipantController@destroy')->name('participant.destroy')->where('participant', '[0-9]+');
+            Route::get('participant/export', 'ParticipantController@export')->name('participant.export');
         });
 
     // Attendance
@@ -194,6 +195,17 @@ Route::middleware('auth')->group(function () {
     Route::get('program/{program}/session/{session}/attendance', 'AttendanceController@indexSession')->name('attendance.index.session');
     Route::get('program/{program}/attendance/search', 'AttendanceController@searchProgram')->name('attendance.search.program');
     Route::get('program/{program}/session/{session}/attendance/search', 'AttendanceController@searchSession')->name('attendance.search.session');
+    // Export attendance (PROGRAM)
+    Route::get(
+        'admin/program/{program}/attendance/export',
+        'AttendanceController@exportProgram'
+    )->name('attendance.export.program');
+
+    // Export attendance (SESI)
+    Route::get(
+        'admin/program/{program}/session/{session}/attendance/export',
+        'AttendanceController@exportSession'
+    )->name('attendance.export.session');
 
     //Position
     Route::get('position/create', 'PositionController@create')->name('position.create');

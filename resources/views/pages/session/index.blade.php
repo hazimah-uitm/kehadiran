@@ -75,7 +75,7 @@
                                 <tr>
                                     <td>{{ $loop->iteration + ($sessions->currentPage() - 1) * $sessions->perPage() }}</td>
                                     <td class="text-wrap">{{ $program->title }}</td>
-                                    <td>{{ $session->title }}</td>
+                                    <td class="text-wrap">{{ $session->title }}</td>
                                     <td>
                                         @if ($session->start_time || $session->end_time)
                                             {{ \Carbon\Carbon::parse($session->start_time)->format('d/m/Y H:i') }}
@@ -85,7 +85,7 @@
                                             -
                                         @endif
                                     </td>
-                                    <td>{{ $session->venue ?? '-' }}</td>
+                                    <td class="text-wrap">{{ $session->venue ?? '-' }}</td>
                                     <td>
                                         @if ($session->publish_status == 'Aktif')
                                             <span class="badge bg-success">Aktif</span>
@@ -103,8 +103,8 @@
                                         @endhasanyrole
 
                                         <a href="{{ route('attendance.index.session', ['program' => $program->id, 'session' => $session->id]) }}"
-                                            class="btn btn-sm btn-success">
-                                            <i class="bx bx-list-check"></i> Kehadiran
+                                            class="btn btn-sm btn-warning">
+                                            <i class="bx bx-list-check"></i> Senarai Kehadiran
                                         </a>
 
                                         <a href="{{ route('session.show', [$program->id, $session->id]) }}"

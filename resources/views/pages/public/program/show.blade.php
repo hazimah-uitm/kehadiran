@@ -87,12 +87,12 @@
                         @endphp
 
                         {{--  @if ($session->id == 8 && $start && $nowMy->isSameDay($start)) --}}
-                        @if ($session->id == 8)
+                        <!-- @if ($session->id == 8)
                         <a href="{{ route('attendance.create.session', ['program' => $program->id, 'session' => $session->id]) }}"
                             class="btn btn-sm btn-success" target="_blank">
                             <i class="bx bx-list-check"></i> Attendance Check-in
                         </a>
-                        @endif
+                        @endif -->
 
                     </div>
                     @endforeach

@@ -6,7 +6,9 @@ use App\Models\Attendance;
 use App\Models\Participant;
 use App\Models\Program;
 use App\Models\Session;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AttendanceController extends Controller
 {
@@ -267,5 +269,154 @@ class AttendanceController extends Controller
         }
 
         return back()->with('info', 'You have already checked in.');
+    }
+
+    private function sanitizeText($str, $max = 50)
+    {
+        $s = preg_replace('/[\r\n\t]+/', ' ', (string)$str);
+        $s = trim($s);
+        if (mb_strlen($s, 'UTF-8') > $max) {
+            $s = mb_substr($s, 0, $max - 3, 'UTF-8') . '...';
+        }
+        return $s ?: '-';
+    }
+
+    public function exportProgram(Program $program, Request $request)
+    {
+        $search = $request->input('search');
+
+        $q = Attendance::with('participant')
+            ->where('program_id', $program->id)
+            ->whereNull('session_id')
+            ->orderBy('id', 'asc');
+
+        if ($search) {
+            $q->where(function ($sub) use ($search) {
+                $sub->whereHas('participant', function ($qq) use ($search) {
+                    $qq->where('name', 'LIKE', "%{$search}%")
+                        ->orWhere('ic_passport', 'LIKE', "%{$search}%")
+                        ->orWhere('phone_no', 'LIKE', "%{$search}%")
+                        ->orWhere('institution', 'LIKE', "%{$search}%")
+                        ->orWhere('participant_code', 'LIKE', "%{$search}%");
+                })->orWhere('participant_code', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $rows = $q->get();
+
+        // Header + data
+        $export = [];
+        $export[] = [
+            'Bil',
+            'Nama Peserta',
+            'Kod Peserta',
+            'IC/Passport',
+            'Telefon',
+            'Institusi',
+            'Direkod Pada',
+        ];
+
+        $i = 1;
+        foreach ($rows as $r) {
+            $p = $r->participant;
+            $export[] = [
+                $i++,
+                $this->sanitizeText($p->name ?? '-'),
+                $p->participant_code ?? ($r->participant_code ?? '-'),
+                $this->sanitizeText($p->ic_passport ?? '-'),
+                $this->sanitizeText($p->phone_no ?? '-'),
+                $this->sanitizeText($p->institution ?? '-'),
+                $r->created_at ? Carbon::parse($r->created_at)->format('d/m/Y H:i') : '-',
+            ];
+        }
+
+        $progCode = preg_replace('/[^A-Za-z0-9]/', '', (string)($program->program_code ?: 'PRG')) ?: 'PRG';
+        $dateStr  = Carbon::now()->format('Ymd_His');
+        $filename = "{$progCode}_attendance_program_{$dateStr}";
+
+        return Excel::create($filename, function ($excel) use ($export, $program) {
+            $excel->setTitle('Kehadiran Program: ' . $program->title);
+            $excel->sheet('Kehadiran', function ($sheet) use ($export) {
+                $sheet->fromArray($export, null, 'A1', false, false);
+                $sheet->row(1, function ($row) {
+                    $row->setFontWeight('bold');
+                });
+                $sheet->setAutoSize(true);
+                $lastCol = chr(ord('A') + count($export[0]) - 1);
+                $sheet->setAutoFilter("A1:{$lastCol}1");
+            });
+        })->download('xlsx');
+    }
+
+    public function exportSession(Program $program, Session $session, Request $request)
+    {
+        abort_unless($session->program_id === $program->id, 404);
+
+        $search = $request->input('search');
+
+        $q = Attendance::with('participant')
+            ->where('program_id', $program->id)
+            ->where('session_id', $session->id)
+            ->orderBy('id', 'asc');
+
+        if ($search) {
+            $q->where(function ($sub) use ($search) {
+                $sub->whereHas('participant', function ($qq) use ($search) {
+                    $qq->where('name', 'LIKE', "%{$search}%")
+                        ->orWhere('ic_passport', 'LIKE', "%{$search}%")
+                        ->orWhere('phone_no', 'LIKE', "%{$search}%")
+                        ->orWhere('institution', 'LIKE', "%{$search}%");
+                })->orWhere('participant_code', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $rows = $q->get();
+
+        $export = [];
+        $export[] = [
+            'No.',
+            'Session',
+            'Session Venue',
+            'Name',
+            'IC/Passport No.',
+            'Phone No.',
+            'Nationality',
+            'Institution/Organization',
+            'Recorded at',
+        ];
+
+        $i = 1;
+        foreach ($rows as $r) {
+            $p = $r->participant;
+            $export[] = [
+                $i++,
+                $this->sanitizeText($session->title ?? '-'),
+                $this->sanitizeText($session->venue ?? '-'),
+                $this->sanitizeText($p->name ?? '-'),
+                $this->sanitizeText($p->ic_passport ?? '-'),
+                $this->sanitizeText($p->phone_no ?? '-'),
+                $this->sanitizeText($p->nationality ?? '-'),
+                $this->sanitizeText($p->institution ?? '-'),
+                $r->created_at ? Carbon::parse($r->created_at)->format('d/m/Y H:i') : '-',
+            ];
+        }
+
+        $progCode = preg_replace('/[^A-Za-z0-9]/', '', (string)($program->program_code ?: 'PRG')) ?: 'PRG';
+        $sessCode = preg_replace('/[^A-Za-z0-9]/', '', (string)($session->id));
+        $dateStr  = Carbon::now()->format('Ymd_His');
+        $filename = "{$progCode}_attendance_session{$sessCode}_{$dateStr}";
+
+        return Excel::create($filename, function ($excel) use ($export, $program, $session) {
+            $excel->setTitle('Attendance Session: ' . $session->title . ' (' . $program->title . ')');
+            $excel->sheet('Attendance Session', function ($sheet) use ($export) {
+                $sheet->fromArray($export, null, 'A1', false, false);
+                $sheet->row(1, function ($row) {
+                    $row->setFontWeight('bold');
+                });
+                $sheet->setAutoSize(true);
+                $lastCol = chr(ord('A') + count($export[0]) - 1);
+                $sheet->setAutoFilter("A1:{$lastCol}1");
+            });
+        })->download('xlsx');
     }
 }

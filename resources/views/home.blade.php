@@ -4,8 +4,8 @@
 <div class="container-fluid mb-3">
     <div class="d-flex align-items-center justify-content-between mb-3">
         <h2 class="fw-500 mb-3 mb-md-0 d-flex align-items-center flex-wrap" style="font-size: 1.3rem;">
-                PROGRAM LIST
-            </h2>
+            PROGRAM LIST
+        </h2>
         <form method="GET" action="{{ route('home') }}" class="d-flex align-items-center">
             <label class="me-2 mb-0 small text-muted">Show</label>
             @php
@@ -23,7 +23,7 @@
 
     <div class="row g-3">
         @forelse($programs as $program)
-        <div class="col-12 col-md-8 col-lg-8">
+        <div class="col-12 col-md-8 col-lg-10">
             <div class="card h-100 shadow-sm border-0">
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title mb-1 text-wrap" title="{{ $program->title }}">{{ $program->title }}</h5>
@@ -72,10 +72,18 @@
                             </div>
 
                             {{-- Butang Kehadiran --}}
-                            <a href="{{ route('attendance.create.session', ['program' => $program->id, 'session' => $session->id]) }}"
-                                class="btn btn-sm btn-success" target="_blank">
-                                <i class="bx bx-list-check"></i> Attendance Check-in
-                            </a>
+                            <div class="d-flex gap-2">
+
+                                <a href="{{ route('attendance.index.session', ['program' => $program->id, 'session' => $session->id]) }}"
+                                    class="btn btn-sm btn-warning">
+                                    <i class="bx bx-list-check"></i> Senarai Kehadiran
+                                </a>
+                                <a href="{{ route('attendance.create.session', ['program' => $program->id, 'session' => $session->id]) }}"
+                                    class="btn btn-sm btn-success" target="_blank">
+                                    <i class="bx bx-list-check"></i> Attendance Check-in
+                                </a>
+                            </div>
+
                         </div>
                         @endforeach
                     </div>

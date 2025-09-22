@@ -6,9 +6,11 @@ use Illuminate\Http\Request;
 use App\Models\Program;
 use App\Models\Participant;
 use BaconQrCode\Encoder\QrCode;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 use SimpleSoftwareIO\QrCode\Facades\QrCode as FacadesQrCode;
 
 class ParticipantController extends Controller
@@ -130,7 +132,7 @@ class ParticipantController extends Controller
         ], [
             'name.required'        => 'Please enter the full name',
             'ic_passport.required' => 'Please enter IC/Passport number',
-               'ic_passport.unique'   => 'This IC/Passport already exists in this program. Please check the participant Code <a href="' . $checkUrl . '" target="_blank">here</a>',
+            'ic_passport.unique'   => 'This IC/Passport already exists in this program. Please check the participant Code <a href="' . $checkUrl . '" target="_blank">here</a>',
             'ic_passport.max'      => 'IC/Passport cannot exceed 191 characters',
             'phone_no.max'         => 'Phone number cannot exceed 30 characters',
         ]);
@@ -508,5 +510,82 @@ class ParticipantController extends Controller
         imagedestroy($im);
 
         Storage::disk('public')->put($destPath, $pngOut);
+    }
+
+    public function export(Program $program, Request $request)
+    {
+        $search = $request->input('search');
+
+        $query = Participant::where('program_id', $program->id)->orderBy('id', 'asc');
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%")
+                    ->orWhere('ic_passport', 'LIKE', "%{$search}%")
+                    ->orWhere('phone_no', 'LIKE', "%{$search}%")
+                    ->orWhere('institution', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $rows = $query->get([
+            'id',
+            'name',
+            'ic_passport',
+            'phone_no',
+            'institution',
+            'nationality',
+            'student_staff_id',
+            'created_at',
+        ]);
+
+        // Sediakan array untuk Excel (header + data)
+        $export = [];
+        $export[] = [
+            'No.',
+            'Name',
+            'IC/Passport No.',
+            'Staf/Student ID (UiTM)',
+            'Phone No.',
+            'Nationality',
+            'Institution/Organization',
+            'Registration Date',
+        ];
+
+        $i = 1;
+        foreach ($rows as $r) {
+            $export[] = [
+                $i++,
+                $r->name,
+                $r->ic_passport,
+                $r->student_staff_id ?: '-',
+                $r->phone_no ?: '-',
+                $r->nationality ?: '-',
+                $r->institution ?: '-',
+                $r->created_at ? Carbon::parse($r->created_at)->format('d/m/Y H:i') : '-',
+            ];
+        }
+
+        // Nama fail: gabung kod/tajuk program + tarikh
+        $progCode = $this->sanitizePrefix($program->program_code ?: 'PRG');
+        $dateStr  = Carbon::now()->format('Ymd_His');
+        $filename = "{$progCode}_participants_{$dateStr}";
+
+        // Generate & download (xlsx)
+        return Excel::create($filename, function ($excel) use ($export, $program) {
+            $excel->setTitle('Participant List: ' . $program->title);
+            $excel->sheet('Participants', function ($sheet) use ($export) {
+                $sheet->fromArray($export, null, 'A1', false, false);
+
+                // Cantikkan header
+                $sheet->row(1, function ($row) {
+                    $row->setFontWeight('bold');
+                });
+
+                // Auto-size columns
+                $lastCol = chr(ord('A') + count($export[0]) - 1);
+                $sheet->setAutoSize(true);
+                $sheet->setAutoFilter("A1:{$lastCol}1");
+            });
+        })->download('xlsx');
     }
 }
