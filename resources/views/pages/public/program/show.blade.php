@@ -90,7 +90,7 @@
                                         $nowMy = \Carbon\Carbon::now('Asia/Kuala_Lumpur');
                                     @endphp
 
-                                    @if (in_array($session->id, [1, 5, 6]))
+                                    @if (in_array($session->id, [1, 5, 6, 7]))
                                         <a href="{{ route('attendance.create.session', ['program' => $program->id, 'session' => $session->id]) }}"
                                             class="btn btn-sm btn-success" target="_blank">
                                             <i class="bx bx-list-check"></i> Attendance Check-in
