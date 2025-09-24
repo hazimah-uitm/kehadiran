@@ -83,7 +83,7 @@
                     <tr>
                         <td>{{ $loop->iteration + ($participants->currentPage() - 1) * $participants->perPage() }}
                         </td>
-                        <td>{{ $p->name }}</td>
+                        <td class="text-wrap">{{ $p->name }}</td>
                         <td>{{ $p->ic_passport }}</td>
                         <td>{{ $p->phone_no ?? '-' }}</td>
                         <td>
