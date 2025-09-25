@@ -62,9 +62,9 @@
                                     </p>
                                 @endif
 
-                                @if ($program->sessions->count())
+                                <!-- @if ($program->sessions->count())
                                     <hr class="my-2" />
-                                    <h6 class="fw-500 mt-1">Sesi Terkini</h6>
+                                    <h6 class="fw-500 mt-1">Current Session</h6>
                                     <div class="list-group">
                                         @foreach ($program->sessions as $session)
                                             @if ($session->id == 7)
@@ -98,14 +98,14 @@
                                                     @if (in_array($session->id, [1, 5, 6, 7]))
                                                     <a href="{{ route('attendance.create.session', ['program' => $program->id, 'session' => $session->id]) }}"
                                                         class="btn btn-sm btn-success" target="_blank">
-                                                        <i class="bx bx-list-check"></i> Kehadiran
+                                                        <i class="bx bx-list-check"></i> Attendance Check-in
                                                     </a>
                                                     @endif
                                                 </div>
                                             @endif
                                         @endforeach
                                     </div>
-                                @endif
+                                @endif -->
 
                                 <div class="mt-auto row g-2">
                                     <div class="col-12 col-sm">
